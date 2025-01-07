@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    cursor: default;
+    background-color: azure;
+}
+
+#TheCanvas {
+    margin: 10px;
+    border: 1px solid #000000;
+    background-color: white;
+}
