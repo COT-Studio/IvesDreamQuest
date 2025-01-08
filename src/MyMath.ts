@@ -38,3 +38,8 @@ export function direction(point1: Vector, point2: Vector): number {
 export function minArc(arc1: number, arc2: number = 0): number {
     return (arc1 - arc2 - Math.PI) % (-2 * Math.PI) + Math.PI
 }
+
+/** 将 num 限制在[a, b]之间 */
+export function clamp(num: number, a: number, b: number): number {
+    return Math.max(a, Math.min(num, b));
+}

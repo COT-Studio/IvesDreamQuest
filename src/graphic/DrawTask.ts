@@ -1,7 +1,7 @@
 import { Transform } from "../Transform.js";
-import { Camera, TheMainCamera, TheUICamera } from "./Camera.js";
+import { Camera } from "./Camera.js";
 import { Viewport, TheViewport } from "./Viewport.js";
-import { Vector } from "../Coord.js";
+import { clamp } from "../MyMath.js";
 import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { CanvasManager, TheCanvasManager } from "./Canvas.js";
@@ -63,17 +63,18 @@ export class DrawImageTask extends DrawTask {
     }
 
     draw() {
-
         const img = this.image;
         // 如果图片没加载好，则跳过绘制
         if (img.loadState !== AssetLoadState.Ready) { return; }
 
         let ghost = this.effects.ghost || 0;
+        ghost = clamp(ghost, 0, 1);
         let brightness = this.effects.brightness || 0;
+        brightness = clamp(brightness, -1, 1);
 
         // 透明度为1的图像直接跳过绘制
         if (ghost == 1) { return; }
-        
+
         const t = this.camera.capture(this.transform);
         const ct = this.canvasManager.viewportToCanvas(t, this.viewport);
         const {x, y, s, sx, sy, d} = ct;

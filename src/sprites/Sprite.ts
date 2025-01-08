@@ -241,15 +241,22 @@ export abstract class SCLikeSprite extends DrawableSprite {
     get d() { return this.transform.d }
     set d(v) { this.transform.d = v }
 
-    drawEffects: IDrawEffects = {
+    private _drawEffects: IDrawEffects = {
         ghost: 0,
         brightness: 0,
     };
 
-    get ghost() { return this.drawEffects.ghost }
-    set ghost(v) { this.drawEffects.ghost = v }
-    get brightness() { return this.drawEffects.brightness }
-    set brightness(v) { this.drawEffects.brightness = v }
+    get ghost() { return this._drawEffects.ghost || 0 }
+    set ghost(v: number) { this._drawEffects.ghost = v }
+    get brightness() { return this._drawEffects.brightness || 0 }
+    set brightness(v: number) { this._drawEffects.brightness = v }
+
+    get drawEffects() {
+        return {
+            ghost: this.ghost,
+            brightness: this.brightness,
+        }
+    }
 
     camera: Camera = TheMainCamera;
     abstract costume: Image;

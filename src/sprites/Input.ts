@@ -1,6 +1,6 @@
 import { TheCanvasManager } from "../graphic/Canvas.js";
 import { TheViewport, Viewport } from "../graphic/Viewport.js";
-import { Vector } from "../Coord.js";
+import { Vector } from "../MyMath.js";
 import { Order } from "../Order.js";
 import { DrawableSprite, Sprite } from "./Sprite.js";
 
@@ -352,6 +352,7 @@ export const ActiveButtons: Set<string> = new Set<string>([
     Mouse.Left,
     Mouse.Middle,
     Mouse.Right,
+    Mouse.Any,
 ]);
 
 /** 各种按键编码（Mouse, Key等）的版本号。不同版本号之间不保证兼容性。 */
@@ -467,6 +468,12 @@ export class Input extends Sprite {
         for (const key of ActiveButtons) {
             switch (this._keyEventType[key]) {
                 case KeyEventType.none:
+                    if (this.s[key] > 0) {
+                        this.s[key] += 1;
+                    } else {
+                        this.s[key] = 0;
+                    }
+                    break;
                 case KeyEventType.up:
                     if (this.s[key] > 0) {
                         this.s[key] *= -1;
@@ -521,13 +528,13 @@ export class Input extends Sprite {
 
     /** 如果轻敲按键并立即松开，在松开的那一帧返回 true
      * @param maxHoldTime 容许按住的最大持续帧数，若按住的时长超过此值则不会判定为轻敲 */
-    isShortClick(button: buttonCode, maxHoldTime = 5): boolean {
+    isShortClick(button: buttonCode, maxHoldTime: number = 10): boolean {
         return this.isUp(button) && this.s[button] >= -maxHoldTime;
     }
 
     /** 如果长按按键并松开，在松开的那一帧返回 true
      * @param minHoldTime 容许按住的最小持续帧数，若按住的时长低于此值则不会判定为轻敲 */
-    isLongRelease(button: buttonCode, minHoldTime = 30): boolean {
+    isLongRelease(button: buttonCode, minHoldTime: number = 20): boolean {
         return this.s[button] <= -minHoldTime;
     }
 

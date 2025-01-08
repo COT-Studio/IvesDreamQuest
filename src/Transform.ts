@@ -1,4 +1,4 @@
-import { minArc, Vector } from "./Coord.js";
+import { minArc, Vector } from "./MyMath.js";
 
 export class Transform {
 

@@ -1,4 +1,4 @@
-import { Vector } from "../Coord.js";
+import { Vector } from "../MyMath.js";
 import { Transform } from "../Transform.js";
 import { Viewport } from "./Viewport.js";
 

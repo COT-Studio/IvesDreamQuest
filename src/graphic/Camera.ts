@@ -1,6 +1,6 @@
 import { Transform } from "../Transform.js";
-import * as Coord from "../Coord.js";
-import { Vector } from "../Coord.js";
+import * as Coord from "../MyMath.js";
+import { Vector } from "../MyMath.js";
 
 export class Camera extends Transform {
 

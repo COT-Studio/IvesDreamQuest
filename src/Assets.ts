@@ -83,8 +83,8 @@ export class BaseAudio extends AbstractAudio {
         this._audio.loop = v;
     }
 
-    get addEventListener() {
-        return this._audio.addEventListener;
+    addEndedEventListener(callback: (this: HTMLAudioElement, ev: Event) => any) {
+        this._audio.addEventListener("ended", callback);
     }
 
     constructor(src: string) {
@@ -308,9 +308,10 @@ export class Music extends AbstractAudio {
         this._isHasEnd = isHasEnd;
         this._volume = 1;
 
+        const handleAudioEndedBind = this.handleAudioEnded.bind(this)
         for (let i = 0; i < this.length; i++) {
             const audio = new BaseAudio(srcList[i]);
-            //audio.addEventListener("ended", this.handleAudioEnded);
+            audio.addEndedEventListener(handleAudioEndedBind);
             this._audioList.push(audio);
         }
 
