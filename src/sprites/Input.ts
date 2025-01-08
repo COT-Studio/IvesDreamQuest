@@ -2,7 +2,8 @@ import { TheCanvasManager } from "../graphic/Canvas.js";
 import { TheViewport, Viewport } from "../graphic/Viewport.js";
 import { Vector } from "../MyMath.js";
 import { Order } from "../Order.js";
-import { DrawableSprite, Sprite } from "./Sprite.js";
+import { Sprite } from "./Sprite.js";
+import { DrawableSprite } from "./DrawableSprite.js";
 
 const enum KeyEventType {
     none = 0,
@@ -261,8 +262,6 @@ export const enum Mouse {
     Any = "MouseAny",
 }
 
-type buttonCode = Key | Mouse;
-
 /** 所有支持响应的按键编码，包括键盘、鼠标、手柄等。  
  * 此列表之外的按键不会响应。 */
 export const ActiveButtons: Set<string> = new Set<string>([
@@ -383,7 +382,7 @@ export class Input extends Sprite {
         return this._mouseTickY;
     }
     /** 鼠标在 Viewport 上的位置 */
-    get mousePosition(): Vector {
+    get mouse(): Vector {
         return [this.mouseX, this.mouseY];
     }
 
@@ -399,7 +398,7 @@ export class Input extends Sprite {
     isMouseActive: boolean = false;
 
     constructor() {
-        super(Order.begin);
+        super(Order.begin_input);
         for (const key of ActiveButtons) {
             this.state[key] = 0;
         }
@@ -507,34 +506,34 @@ export class Input extends Sprite {
     }
 
     /** 按键被按下的一瞬间，返回 true */
-    isDown(button: buttonCode): boolean {
+    isDown(button: Key | Mouse): boolean {
         return this.s[button] == 1;
     }
 
     /** 按键松开的一瞬间，返回 true */
-    isUp(button: buttonCode): boolean {
+    isUp(button: Key | Mouse): boolean {
         return this.s[button] < 0;
     }
 
     /** 如果按键被按住，返回 true */
-    isHold(button: buttonCode): boolean {
+    isHold(button: Key | Mouse): boolean {
         return this.s[button] > 0;
     }
 
     /** 如果按键闲置，返回 true */
-    isIdle(button: buttonCode): boolean {
+    isIdle(button: Key | Mouse): boolean {
         return this.s[button] <= 0;
     }
 
     /** 如果轻敲按键并立即松开，在松开的那一帧返回 true
      * @param maxHoldTime 容许按住的最大持续帧数，若按住的时长超过此值则不会判定为轻敲 */
-    isShortClick(button: buttonCode, maxHoldTime: number = 10): boolean {
+    isShortClick(button: Key | Mouse, maxHoldTime: number = 10): boolean {
         return this.isUp(button) && this.s[button] >= -maxHoldTime;
     }
 
     /** 如果长按按键并松开，在松开的那一帧返回 true
-     * @param minHoldTime 容许按住的最小持续帧数，若按住的时长低于此值则不会判定为轻敲 */
-    isLongRelease(button: buttonCode, minHoldTime: number = 20): boolean {
+     * @param minHoldTime 容许按住的最小持续帧数，若按住的时长低于此值则不会判定为长按 */
+    isLongRelease(button: Key | Mouse, minHoldTime: number = 12): boolean {
         return this.s[button] <= -minHoldTime;
     }
 

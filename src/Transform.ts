@@ -52,7 +52,13 @@ export class Transform {
     }
 
     /** 方向 */
-    d = this.direction;
+    get d(): number {
+        return this.direction;
+    }
+
+    set d(v: number) {
+        this.direction = v;
+    }
 
     /**
      * 构造一个 Transform，它是 Stage 中一个对象的位置、缩放等信息的集合

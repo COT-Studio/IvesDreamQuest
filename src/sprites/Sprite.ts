@@ -1,12 +1,6 @@
 import { TheSpritePool } from "../SpritePool.js";
-import { Viewport } from "../graphic/Viewport.js";
 import { Order } from "../Order.js";
 import { TheClock } from "../Clock.js";
-import { Transform } from "../Transform.js";
-import { DrawImageTask, IDrawEffects } from "../graphic/DrawTask.js";
-import { Camera, TheMainCamera } from "../graphic/Camera.js";
-import { Image } from "../Assets.js";
-import { Layer } from "../Layer.js";
 
 //let TheSpriteOriOrder: number = 0;
 
@@ -166,12 +160,12 @@ export abstract class Sprite {
 
     abstract update(): void
 
-    /** 每次 update 之前都会调用一次 predicate，如果返回 true 则调用 callback，最多 durability 次（不填则表示无数次） */
+    /** 每次 update 之前都会调用一次 predicate，如果返回 true 则调用 callback，最多 durability 次（默认为无数次） */
     addTask(predicate: (task: SpriteTask) => boolean, callback: (task: SpriteTask) => any, durability?: number) {
         new SpriteTask(this, predicate, callback, durability);
     }
 
-    /** 接下来每过 number 帧就调用一次 callback，最多 durability 次（不填则表示无数次）  
+    /** 接下来每过 number 帧就调用一次 callback，最多 durability 次（默认为无数次）  
      * 例如 0 tick 调用该函数，时间为3，那么在第 3, 6, 9...tick分别会调用一次 callback
      */
     addTimeTask(time: number, callback: (task: SpriteTask) => any, durability?: number) {
@@ -186,85 +180,9 @@ export abstract class Sprite {
         if (this._doOnceFlags.has(flag)) {
             return { isFullfiled: false };
         } else {
+            this._doOnceFlags.add(flag);
             return { result: func(), isFullfiled: true }
         }
-    }
-
-}
-
-export abstract class DrawableSprite extends Sprite {
-
-    // 如果此值变为 false，不会调用该角色的 draw()
-    isShow: boolean;
-
-    constructor(order: Order = Order.begin, subOrder: number = 0) {
-        super(order, subOrder);
-        this.isShow = true;
-    }
-
-    abstract draw(): void
-
-    /** 此方法返回 false 时，不会调用该角色的 draw() */
-    isInViewport(viewport: Viewport): boolean {
-        return true;
-    }
-
-}
-
-/** 内置一个 transform 的 DrawableSprite。  
- * 因为不想起太长的名字，像 DrawableSpriteWithATransform 啥的，  
- * 所以就根据我的个人经历，起了这么一个简洁形象的名字：类似SC的角色。
- */
-export abstract class SCLikeSprite extends DrawableSprite {
-
-    transform: Transform = new Transform();
-
-    get x() { return this.transform.x }
-    set x(v) { this.transform.x = v }
-    get y() { return this.transform.y }
-    set y(v) { this.transform.y = v }
-
-    get position() { return this.transform.position }
-    set position(v) { this.transform.position = v }
-
-    get s() { return this.transform.s }
-    set s(v) { this.transform.s = v }
-
-    get sx() { return this.transform.sx }
-    set sx(v) { this.transform.sx = v }
-    get sy() { return this.transform.sy }
-    set sy(v) { this.transform.sy = v }
-
-    get stretch() { return this.transform.stretch }
-    set stretch(v) { this.transform.stretch = v }
-
-    get d() { return this.transform.d }
-    set d(v) { this.transform.d = v }
-
-    private _drawEffects: IDrawEffects = {
-        ghost: 0,
-        brightness: 0,
-    };
-
-    get ghost() { return this._drawEffects.ghost || 0 }
-    set ghost(v: number) { this._drawEffects.ghost = v }
-    get brightness() { return this._drawEffects.brightness || 0 }
-    set brightness(v: number) { this._drawEffects.brightness = v }
-
-    get drawEffects() {
-        return {
-            ghost: this.ghost,
-            brightness: this.brightness,
-        }
-    }
-
-    camera: Camera = TheMainCamera;
-    abstract costume: Image;
-    layer: Layer = Layer.top;
-    subLayer: number = 0;
-
-    draw(): void {
-        new DrawImageTask(this.transform, this.camera, this.costume, this.layer, this.subLayer, this.drawEffects);
     }
 
 }

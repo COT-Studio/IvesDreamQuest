@@ -5,7 +5,7 @@ import { clamp } from "../MyMath.js";
 import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { CanvasManager, TheCanvasManager } from "./Canvas.js";
-import { AssetLoadState, Image as BaseImage } from "../Assets.js";
+import { AssetLoadState, BaseImage } from "../Assets.js";
 
 /**
  * Stage 中有许多的 Transform，表示各种对象的位置、缩放等信息。
@@ -91,9 +91,18 @@ export class DrawImageTask extends DrawTask {
         if (brightness < 0) {
             ctx.filter = `brightness(${brightness + 1})`;
         }
-        // 变换，绘制
+        // 变换
         ctx.translate(x, y);
         ctx.rotate(-d);
+        // 翻转
+        if (w < 0 && h < 0) {
+            ctx.transform(-1, 0, 0, -1, 0, 0);
+        } else if (w < 0) {
+            ctx.transform(-1, 0, 0, 1, 0, 0);
+        } else if (h < 0) {
+            ctx.transform(1, 0, 0, -1, 0, 0);
+        }
+        // 绘制
         ctx.drawImage(img.image, -w / 2, -h / 2, w, h);
         // 变亮
         if (brightness > 0) {

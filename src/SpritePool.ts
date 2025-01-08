@@ -1,5 +1,6 @@
 import { TheViewport } from "./graphic/Viewport.js";
-import { DrawableSprite, Sprite } from "./sprites/Sprite.js";
+import { Sprite } from "./sprites/Sprite.js";
+import { DrawableSprite } from "./sprites/DrawableSprite.js";
 
 
 /** 

@@ -1,3 +1,5 @@
+import { clamp } from "./MyMath.js";
+
 export const enum AssetLoadState {
     /** 不可用，暂时没有开始加载，未设定其 src */
     Idle,
@@ -21,10 +23,10 @@ abstract class Asset {
 
 }
 
-export class Image extends Asset {
+export class BaseImage extends Asset {
 
     readonly image: HTMLImageElement;
-    private src: string;
+    private _src: string;
     private _loadState: AssetLoadState;
 
     get loadState(): AssetLoadState {
@@ -34,12 +36,15 @@ export class Image extends Asset {
     constructor(src: string) {
         super()
         this.image = new window.Image();
-        this.src = src;
+        this._src = src;
         this._loadState = AssetLoadState.Idle
     }
 
     load() {
-        this.image.src = this.src;
+        if (this.loadState == AssetLoadState.Loading || this.loadState == AssetLoadState.Ready) {
+            return this;
+        }
+        this.image.src = this._src;
         this._loadState = AssetLoadState.Loading;
         this.image.addEventListener("load", ev => this._loadState = AssetLoadState.Ready);
         this.image.addEventListener("error", ev => this._loadState = AssetLoadState.Fail);
@@ -125,7 +130,7 @@ export class BaseAudio extends AbstractAudio {
     }
 
     set volume(v: number) {
-        this._audio.volume = v;
+        this._audio.volume = clamp(v, 0, 1);
     }
 
     /** 开始或继续播放 */
@@ -161,6 +166,7 @@ export class BaseAudio extends AbstractAudio {
 export class Sound extends AbstractAudio {
 
     private _audioList: Array<BaseAudio>;
+    private _src: string;
     private _nextIdx: number;
     private _length: number;
 
@@ -198,6 +204,7 @@ export class Sound extends AbstractAudio {
      */
     constructor(src: string, amount: number) {
         super();
+        this._src = src;
         this._audioList = [];
         this._nextIdx = 0;
         this._length = amount;
@@ -211,7 +218,7 @@ export class Sound extends AbstractAudio {
     }
 
     load() {
-        if (this.loadState == AssetLoadState.Ready) { return this; }
+        if (this.loadState == AssetLoadState.Loading || this.loadState == AssetLoadState.Ready) { return this; }
         this._loadState = AssetLoadState.Loading;
         for (const audio of this._audioList) {
             if (audio.loadState == AssetLoadState.Ready) { continue; }
@@ -233,6 +240,7 @@ export class Sound extends AbstractAudio {
 
     set volume(v: number) {
         if (v == this.volume) { return; }
+        this._volume = v;
         for (const audio of this._audioList) {
             audio.volume = v;
         }
@@ -240,6 +248,13 @@ export class Sound extends AbstractAudio {
 
     /** 开始播放 */
     play() {
+        if (this.loadState != AssetLoadState.Ready) {
+            if (this.loadState == AssetLoadState.Idle) {
+                this.load();
+                console.warn("自动加载了音效：" + this._src);
+            }
+            return;
+        }
         this._next.reset();
         this._next.play();
         this._step();
@@ -257,6 +272,7 @@ export class Sound extends AbstractAudio {
 export class Music extends AbstractAudio {
 
     private _audioList: Array<BaseAudio>;
+    private _firstSrc: string;
     private _currentIdx: number;
     private _nextIdx: number;
     private _length: number;
@@ -300,6 +316,7 @@ export class Music extends AbstractAudio {
      */
     constructor(srcList: string[], isHasPre: boolean, isHasEnd: boolean) {
         super();
+        this._firstSrc = srcList[0];
         this._audioList = [];
         this._currentIdx = 0;
         this._nextIdx = 0;
@@ -308,7 +325,7 @@ export class Music extends AbstractAudio {
         this._isHasEnd = isHasEnd;
         this._volume = 1;
 
-        const handleAudioEndedBind = this.handleAudioEnded.bind(this)
+        const handleAudioEndedBind = this._handleAudioEnded.bind(this)
         for (let i = 0; i < this.length; i++) {
             const audio = new BaseAudio(srcList[i]);
             audio.addEndedEventListener(handleAudioEndedBind);
@@ -319,7 +336,7 @@ export class Music extends AbstractAudio {
         this._playTimestamp = 0;
     }
 
-    private handleAudioEnded() {
+    private _handleAudioEnded() {
         if (0 <= this._nextIdx && this._nextIdx < this.length) {
             this._currentIdx = this._nextIdx;
             this._nextIdx ++;
@@ -331,7 +348,7 @@ export class Music extends AbstractAudio {
     }
 
     load() {
-        if (this.loadState == AssetLoadState.Ready) { return this; }
+        if (this.loadState == AssetLoadState.Loading || this.loadState == AssetLoadState.Ready) { return this; }
         this._loadState = AssetLoadState.Loading;
         for (const audio of this._audioList) {
             if (audio.loadState == AssetLoadState.Ready) { continue; }
@@ -353,6 +370,7 @@ export class Music extends AbstractAudio {
 
     set volume(v: number) {
         if (v == this.volume) { return; }
+        this._volume = v;
         for (const audio of this._audioList) {
             audio.volume = v;
         }
@@ -374,6 +392,13 @@ export class Music extends AbstractAudio {
 
     /** 开始或继续播放 */
     play() {
+        if (this.loadState != AssetLoadState.Ready) {
+            if (this.loadState == AssetLoadState.Idle) {
+                this.load();
+                console.warn("自动加载了音乐，该音乐的首个src为：" + this._firstSrc);
+            }
+            return;
+        }
         this._play(this.currentIdx, true);
     }
 
@@ -403,7 +428,7 @@ export class Music extends AbstractAudio {
         this.step(idx);
         this._audioList[this.currentIdx].pause();
         this._audioList[this.currentIdx].reset();
-        this.handleAudioEnded();
+        this._handleAudioEnded();
     }
 
 }
@@ -413,8 +438,8 @@ export class Music extends AbstractAudio {
  * 加载一张贴图。
  * @param url 图片在 image 文件夹中的路径。
  */
-export function img(url: ImageURL): Image {
-    return new Image("../assets/image/" + url);
+export function img(url: ImageURL): BaseImage {
+    return new BaseImage("../assets/image/" + url);
 }
 
 /**

@@ -31,6 +31,7 @@ export class Camera extends Transform {
                 transform.scale,
                 transform.stretch,
                 transform.direction
+                
             );
         } else {
             return new Transform(
@@ -83,3 +84,5 @@ export class Camera extends Transform {
 export const TheMainCamera = new Camera();
 /** 用于“拍摄”UI的相机，通常不会变化 */
 export const TheUICamera = new Camera();
+/** 一个空相机，绝对不会发生任何变化 */
+export const TheNullCamera = new Camera();
