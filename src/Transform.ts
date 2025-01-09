@@ -74,4 +74,18 @@ export class Transform {
         this.direction = direction;
     }
 
+    /** 输入两个或多个 Transform，返回它们的叠加结果 */
+    static Add(...transforms: Transform[]): Transform {
+        const result = new Transform();
+        transforms.forEach((t) => {
+            result.x += t.x;
+            result.y += t.y;
+            result.s *= t.s;
+            result.sx *= t.sx;
+            result.sy *= t.sy;
+            result.d += t.d;
+        })
+        return result;
+    }
+
 };
