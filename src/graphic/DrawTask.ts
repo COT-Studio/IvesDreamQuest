@@ -17,13 +17,17 @@ import { AssetLoadState, BaseImage } from "../Assets.js";
 
 export abstract class DrawTask {
 
-    readonly layer: Layer;
-    readonly subLayer: number;
-    readonly orgLayer: number;
+    layer: Layer;
+    subLayer: number;
+    orgLayer: number;
 
     constructor(layer: Layer = Layer.top, subLayer: number = 0) {
         this.layer = layer;
         this.subLayer = subLayer;
+        this.orgLayer = TheDrawTaskQueue.tasks.length;
+    }
+
+    queue() {
         this.orgLayer = TheDrawTaskQueue.tasks.length;
         TheDrawTaskQueue.push(this);
     }
@@ -62,6 +66,9 @@ export class DrawImageTask extends DrawTask {
     draw() {
         const img = this.image;
         // 如果图片没加载好，则跳过绘制
+        if (img.loadState == AssetLoadState.Idle || img.loadState == AssetLoadState.Fail) {
+            img.load();
+        }
         if (img.loadState !== AssetLoadState.Ready) { return; }
 
         let ghost = this.effects.ghost || 0;

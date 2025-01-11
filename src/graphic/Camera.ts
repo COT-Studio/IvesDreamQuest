@@ -80,7 +80,9 @@ export class Camera extends Transform {
     }
 };
 
-/** 用于“拍摄”游戏场景的主要相机 */
+/** 用于“拍摄”游戏场景的主要相机
+ * 注意：一切对相机的改动都应该在一帧最开始时进行，否则DrawText无法准确获取
+ */
 export const TheMainCamera = new Camera();
 /** 用于“拍摄”UI的相机，通常不会变化 */
 export const TheUICamera = new Camera();

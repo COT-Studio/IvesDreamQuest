@@ -15,14 +15,14 @@ const getTextWidth = function(ctx: CanvasRenderingContext2D, text: string): numb
     } else if (ImageCharRegExp.test(text)) {
         return 0;
     } else {
-        return ctx.measureText(text).width
+        return ctx.measureText(text).width;
     }
 }
 
-const getFontText = function(isBold: boolean, isItalic: boolean, size: number) {
+export const getFontText = function(isBold: boolean, isItalic: boolean, size: number) {
     let italic = isItalic ? "italic " : ""
     let bold = isBold ? "bold " : "";
-    return italic + bold + `${Math.abs(size)}px SourceHanSans`
+    return italic + bold + `${Math.abs(size)}px sans-serif`
 }
 
 /** 绘制文本的任务 */
@@ -33,7 +33,7 @@ export class DrawTextTask extends DrawTask {
     camera: Camera;
     lines: partString[][];
     fontSize: number;
-    lineheight: number;
+    lineHeight: number;
     alignX: "left" | "center" | "right";
     alignY: "top" | "middle" | "bottom";
     width: number;
@@ -43,9 +43,6 @@ export class DrawTextTask extends DrawTask {
     strokeWidth?: number;
     effects: IDrawEffects;
 
-    private _captureTransform: Transform;
-    private _canvasTransform: Transform;
-
     constructor(transform: Transform, camera: Camera, text: string, fontSize: number, lineHeight: number,
         alignX: "left" | "center" | "right" = "center", alignY: "top" | "middle" | "bottom" = "middle",
         width: number = 0, color?: string, strokeColor?: string, strokeWidth?: number,
@@ -54,7 +51,7 @@ export class DrawTextTask extends DrawTask {
         this.transform = transform;
         this.camera = camera;
         this.fontSize = fontSize;
-        this.lineheight = lineHeight;
+        this.lineHeight = lineHeight;
         this.alignX = alignX;
         this.alignY = alignY;
         this.width = width > 0 ? width : Infinity;
@@ -80,13 +77,11 @@ export class DrawTextTask extends DrawTask {
         // [["离离原上", "\g", "草", "\i", "、一岁一", "\g", "枯荣", "\i", "。", "\w"],
         // ["野火烧不尽、", "\b", "春风", "\i", "吹又生。"]]
         // 把超出行宽的部分拆成多行（自动换行）
-        this._captureTransform = camera.capture(this.transform);
-        this._canvasTransform = TheCanvasManager.viewportToCanvas(this._captureTransform, TheViewport);
         const ctx = TheCanvasManager.ctx;
         ctx.save();
         ctx.textAlign = alignX;
         ctx.textBaseline = alignY;
-        ctx.font = getFontText(false, false, this.fontSize * this._canvasTransform.s * this._canvasTransform.sx);
+        ctx.font = getFontText(false, false, this.fontSize);
         console.log();
         let linesAutoN: partString[][] = [];
         for (let row of linesMagic) {
@@ -146,7 +141,8 @@ export class DrawTextTask extends DrawTask {
         // 透明度为1，直接跳过绘制
         if (ghost == 1) { return; }
 
-        const ct = this._canvasTransform;
+        const t = this.camera.capture(this.transform);
+        const ct = TheCanvasManager.viewportToCanvas(t, TheViewport);
         const { x, y, s, sx, sy, d } = ct;
 
         const ctx = TheCanvasManager.ctx;
@@ -172,8 +168,9 @@ export class DrawTextTask extends DrawTask {
         }
         ctx.textAlign = this.alignX;
         ctx.textBaseline = this.alignY;
-        ctx.lineWidth = (this.strokeWidth ? this.strokeWidth : 1) * Math.abs(ct.s * ct.sx);
-        let fontSize = Math.abs(this.fontSize * ct.s * ct.sx);
+        const fontScale = Math.abs(ct.s * ct.sx);
+        ctx.lineWidth = (this.strokeWidth ? this.strokeWidth : 1) * fontScale;
+        let fontSize = Math.abs(this.fontSize * fontScale);
 
         let isBold = false;
         let isItalic = false;
@@ -183,9 +180,9 @@ export class DrawTextTask extends DrawTask {
         updateFont();
         let py = 0;
         if (this.alignY == "bottom") {
-            py = (this.lines.length - 1) * this.lineheight * -1 * Math.abs(ct.s * ct.sy);
+            py = (this.lines.length - 1) * this.lineHeight * -1 * Math.abs(ct.s * ct.sy);
         } else if (this.alignY == "middle") {
-            py = (this.lines.length - 1) * this.lineheight * -0.5 * Math.abs(ct.s * ct.sy);
+            py = (this.lines.length - 1) * this.lineHeight * -0.5 * Math.abs(ct.s * ct.sy);
         }
         for (let line of this.lines) {
             let px = 0;
@@ -202,6 +199,7 @@ export class DrawTextTask extends DrawTask {
             if (this.alignX == "center") {
                 px = lineWidth * -0.5;
             }
+            px *= fontScale;
             for (let i = 0; i < line.length; i++) {
                 let { text, width } = line[i];
                 let nextWidth = i + 1 < line.length ? line[i + 1].width : 0;
@@ -213,6 +211,7 @@ export class DrawTextTask extends DrawTask {
                 } else {
                     mx = nextWidth;
                 }
+                mx *= fontScale;
                 if (Char.__controlBegin__ <= text && text <= Char.__controlEnd__) {
                     // 控制字符
                     switch (text) {
@@ -286,7 +285,7 @@ export class DrawTextTask extends DrawTask {
                 }
                 px += mx;
             }
-            py += this.lineheight * Math.abs(ct.s * ct.sy);
+            py += this.lineHeight * Math.abs(ct.s * ct.sy);
         }
         ctx.restore();
     }

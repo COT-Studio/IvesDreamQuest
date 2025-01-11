@@ -9,9 +9,18 @@ import { SCLikeSprite } from "./base/SCLikeSprite.js";
 
 export class HelloSprite extends SCLikeSprite {
 
-    costume: BaseImage = TheImage.test;
+    drawTextTask: DrawTextTask;
+
+    constructor() {
+        super();
+        this.costume = TheImage.test;
+        this.drawTextTask = new DrawTextTask(this.transform, this.camera,
+            `你好，世界！\n我${Char.bold}操死${Char.boldEnd}你的马\n说的道理\uE001啊啊啊玛索鞋\uE002那我灭\n\uE003The quick brown fox jumps over the lazy \uE004dog.`,
+            10, 12, "center", "middle", 210, "#000000", "#ffffff", 2);
+    }
 
     update(): void {
+        console.log(this.drawTextTask.transform == this.drawTask.transform);
         this.position = TheInput.mouse;
         //this.s = Math.cos(deg(this.clock) * 3) * 2;
         this.stretch = [
@@ -52,7 +61,7 @@ export class HelloSprite extends SCLikeSprite {
 
     draw(): void {
         super.draw();
-        new DrawTextTask(this.transform, this.camera, `你好，世界！\n我${Char.bold}操死${Char.boldEnd}你的马\n说的道理\uE001啊啊啊玛索鞋\uE002那我灭\n\uE003The quick brown fox jumps over the lazy \uE004dog.`, 20, 24, "center", "middle", Infinity, "#000000", "#ffffff", 2);
+        this.drawTextTask.queue();
     }
 
 }

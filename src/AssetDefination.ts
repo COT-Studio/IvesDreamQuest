@@ -1,5 +1,7 @@
 import { img, msc, snd } from "./Assets.js";
 
+export const TheEmptyImage = img("__empty__.png");
+
 export const TheImage = {
     bg: {
         blank_white: img("bg/blank_white.png").load(),

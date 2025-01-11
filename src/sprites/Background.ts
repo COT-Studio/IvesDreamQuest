@@ -6,12 +6,11 @@ import { SCLikeSprite } from "./base/SCLikeSprite.js";
 
 export class Background extends SCLikeSprite {
 
-    costume = TheImage.bg.blank_grey;
-    camera = TheNullCamera;
-    layer = Layer.bottom;
-
     constructor() {
         super(Order.begin_bg);
+        this.costume = TheImage.bg.blank_grey;
+        this.camera = TheNullCamera;
+        this.layer = Layer.bottom;
         this.s = 2;
     }
 

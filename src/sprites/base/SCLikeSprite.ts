@@ -1,8 +1,10 @@
+import { TheEmptyImage as TheNullImage } from "../../AssetDefination.js";
 import { BaseImage } from "../../Assets.js";
 import { Camera, TheMainCamera } from "../../graphic/Camera.js";
-import { IDrawEffects, DrawImageTask } from "../../graphic/DrawTask.js";
+import { IDrawEffects, DrawImageTask, DrawTask } from "../../graphic/DrawTask.js";
 import { Layer } from "../../Layer.js";
 import { Vector } from "../../MyMath.js";
+import { Order } from "../../Order.js";
 import { Rect } from "../../Rect.js";
 import { Transform } from "../../Transform.js";
 import { DrawableSprite } from "./DrawableSprite.js";
@@ -14,7 +16,23 @@ import { DrawableSprite } from "./DrawableSprite.js";
 
 export abstract class SCLikeSprite extends DrawableSprite {
 
-    readonly transform: Transform = new Transform();
+    drawTask: DrawImageTask;
+
+    get transform(): Transform {
+        return this.drawTask.transform;
+    }
+
+    set transform(v: Transform) {
+        this.drawTask.transform = v;
+    }
+    
+    get camera(): Camera {
+        return this.drawTask.camera;
+    }
+
+    set camera(v: Camera) {
+        this.drawTask.camera = v;
+    }
 
     get x() { return this.transform.x; }
     set x(v) { this.transform.x = v; }
@@ -38,32 +56,52 @@ export abstract class SCLikeSprite extends DrawableSprite {
     get d() { return this.transform.d; }
     set d(v) { this.transform.d = v; }
 
-    private _drawEffects: IDrawEffects = {
-        ghost: 0,
-        brightness: 0,
-    };
-
-    get ghost() { return this._drawEffects.ghost || 0; }
-    set ghost(v: number) { this._drawEffects.ghost = v; }
-    get brightness() { return this._drawEffects.brightness || 0; }
-    set brightness(v: number) { this._drawEffects.brightness = v; }
-
-    get drawEffects() {
-        return {
-            ghost: this.ghost,
-            brightness: this.brightness,
-        };
+    get drawEffects(): IDrawEffects {
+        return this.drawTask.effects;
     }
 
-    camera: Camera = TheMainCamera;
-    abstract costume: BaseImage;
-    layer: Layer = Layer.top;
-    subLayer: number = 0;
+    set drawEffects(v: IDrawEffects) {
+        this.drawTask.effects = v;
+    }
 
-    readonly hitBox: Rect = new Rect([0, 0], [0, 0]);
+    get ghost() { return this.drawEffects.ghost || 0; }
+    set ghost(v: number) { this.drawEffects.ghost = v; }
+    get brightness() { return this.drawEffects.brightness || 0; }
+    set brightness(v: number) { this.drawEffects.brightness = v; }
+
+    get costume(): BaseImage {
+        return this.drawTask.image;
+    }
+
+    set costume(v: BaseImage) {
+        this.drawTask.image = v;
+    }
+
+    get layer(): Layer {
+        return this.drawTask.layer;
+    }
+    
+    set layer(v: Layer) {
+        this.drawTask.layer = v;
+    }
+
+    get subLayer(): number {
+        return this.drawTask.subLayer;
+    }
+    
+    set subLayer(v: number) {
+        this.drawTask.subLayer = v;
+    }
+
+    hitBox: Rect = new Rect([0, 0], [0, 0]);
+
+    constructor(order: Order = Order.end, subOrder: number = 0) {
+        super(order, subOrder);
+        this.drawTask = new DrawImageTask(new Transform(), TheMainCamera, TheNullImage, Layer.top, 0, {});
+    }
 
     draw(): void {
-        new DrawImageTask(this.transform, this.camera, this.costume, this.layer, this.subLayer, this.drawEffects);
+        this.drawTask.queue();
     }
 
     /** 该矩形是否接触另一个角色、矩形或点（包括搭边） */
