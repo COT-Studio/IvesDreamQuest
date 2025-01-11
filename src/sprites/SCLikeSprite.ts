@@ -5,7 +5,7 @@ import { Layer } from "../Layer.js";
 import { Vector } from "../MyMath.js";
 import { Rect } from "../Rect.js";
 import { Transform } from "../Transform.js";
-import { DrawableSprite } from "./DrawableSprite.js";
+import { DrawableSprite } from "./base/DrawableSprite.js";
 
 /** 内置一个 transform 的 DrawableSprite。
  * 因为不想起太长的名字，像 DrawableSpriteWithATransform 啥的，

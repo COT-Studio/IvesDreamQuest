@@ -1,10 +1,10 @@
 import { Transform } from "../Transform.js";
 import { Camera } from "./Camera.js";
-import { Viewport, TheViewport } from "./Viewport.js";
+import { TheViewport } from "./Viewport.js";
 import { clamp } from "../MyMath.js";
 import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
-import { CanvasManager, TheCanvasManager } from "./Canvas.js";
+import { TheCanvasManager } from "./Canvas.js";
 import { AssetLoadState, BaseImage } from "../Assets.js";
 
 /**
@@ -47,19 +47,16 @@ export class DrawImageTask extends DrawTask {
     image: BaseImage;
     effects: IDrawEffects;
 
-    viewport: Viewport
-    canvasManager: CanvasManager;
-
-    constructor(transform: Transform, camera: Camera, image: BaseImage, layer: Layer = Layer.top, subLayer: number = 0, effects: IDrawEffects = {},
-        viewport: Viewport = TheViewport, canvasManager: CanvasManager = TheCanvasManager) {
+    constructor(transform: Transform, camera: Camera, image: BaseImage,
+        layer: Layer = Layer.top, subLayer: number = 0, effects: IDrawEffects = {}) {
         super(layer, subLayer);
         this.transform = transform;
         this.camera = camera;
         this.image = image;
         this.effects = effects;
-
-        this.viewport = viewport;
-        this.canvasManager = canvasManager;
+        if (image.loadState == AssetLoadState.Idle || image.loadState == AssetLoadState.Fail) {
+            image.load();
+        }
     }
 
     draw() {
@@ -76,21 +73,13 @@ export class DrawImageTask extends DrawTask {
         if (ghost == 1) { return; }
 
         const t = this.camera.capture(this.transform);
-        const ct = this.canvasManager.viewportToCanvas(t, this.viewport);
+        const ct = TheCanvasManager.viewportToCanvas(t, TheViewport);
         const {x, y, s, sx, sy, d} = ct;
         const w = img.image.width * s * sx;
         const h = img.image.height * s * sy;
 
-        const ctx = this.canvasManager.ctx;
+        const ctx = TheCanvasManager.ctx;
         ctx.save();
-        // 透明度
-        if (ghost) {
-            ctx.globalAlpha = 1 - Math.min(1, Math.max(0, ghost));
-        }
-        // 变暗
-        if (brightness < 0) {
-            ctx.filter = `brightness(${brightness + 1})`;
-        }
         // 变换
         ctx.translate(x, y);
         ctx.rotate(-d);
@@ -101,6 +90,14 @@ export class DrawImageTask extends DrawTask {
             ctx.transform(-1, 0, 0, 1, 0, 0);
         } else if (h < 0) {
             ctx.transform(1, 0, 0, -1, 0, 0);
+        }
+        // 透明度
+        if (ghost) {
+            ctx.globalAlpha = 1 - ghost;
+        }
+        // 变暗
+        if (brightness < 0) {
+            ctx.filter = `brightness(${brightness + 1})`;
         }
         // 绘制
         ctx.drawImage(img.image, -w / 2, -h / 2, w, h);
@@ -113,8 +110,3 @@ export class DrawImageTask extends DrawTask {
         ctx.restore();
     }
 };
-/*
-export class DrawTextTask extends DrawTask {
-
-}
-*/

@@ -2,7 +2,7 @@ import { DrawTask } from "./DrawTask.js";
 
 
 function layerSort(a: DrawTask, b: DrawTask): number {
-    return (b.layer - a.layer) || (b.subLayer - a.subLayer) || (b.orgLayer - a.orgLayer);
+    return (b.layer - a.layer) || (b.subLayer - a.subLayer) || (a.orgLayer - b.orgLayer);
 }
 
 export class DrawTaskQueue {

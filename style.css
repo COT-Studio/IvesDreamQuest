@@ -9,3 +9,8 @@ body {
     border: 1px solid #000000;
     background-color: white;
 }
+
+@font-face {
+    font-family: "SourceHanSans";
+    src: url(assets/fonts/SourceHanSans-VF.ttf.ttc);
+}

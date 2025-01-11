@@ -30,4 +30,4 @@ function main() {
     update();
 };
 
-main();
+window.addEventListener("load", main);

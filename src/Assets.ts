@@ -44,6 +44,9 @@ export class BaseImage extends Asset {
         if (this.loadState == AssetLoadState.Loading || this.loadState == AssetLoadState.Ready) {
             return this;
         }
+        if (this.loadState == AssetLoadState.Fail) {
+            this.image.src = "";
+        }
         this.image.src = this._src;
         this._loadState = AssetLoadState.Loading;
         this.image.addEventListener("load", ev => this._loadState = AssetLoadState.Ready);
@@ -105,6 +108,9 @@ export class BaseAudio extends AbstractAudio {
         if (s == AssetLoadState.Ready) { return this; }
         if (s == AssetLoadState.Idle) {
             this._audio.src = this._src;
+        }
+        if (this.loadState == AssetLoadState.Fail) {
+            this._audio.load();
         }
         this._loadState = AssetLoadState.Loading;
         this._audio.addEventListener("canplaythrough", ev => {
@@ -249,7 +255,7 @@ export class Sound extends AbstractAudio {
     /** 开始播放 */
     play() {
         if (this.loadState != AssetLoadState.Ready) {
-            if (this.loadState == AssetLoadState.Idle) {
+            if (this.loadState == AssetLoadState.Idle || this.loadState == AssetLoadState.Fail) {
                 this.load();
                 console.warn("自动加载了音效：" + this._src);
             }
@@ -393,7 +399,7 @@ export class Music extends AbstractAudio {
     /** 开始或继续播放 */
     play() {
         if (this.loadState != AssetLoadState.Ready) {
-            if (this.loadState == AssetLoadState.Idle) {
+            if (this.loadState == AssetLoadState.Idle || this.loadState == AssetLoadState.Fail) {
                 this.load();
                 console.warn("自动加载了音乐，该音乐的首个src为：" + this._firstSrc);
             }

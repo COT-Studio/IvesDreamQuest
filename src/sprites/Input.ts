@@ -2,8 +2,8 @@ import { TheCanvasManager } from "../graphic/Canvas.js";
 import { TheViewport, Viewport } from "../graphic/Viewport.js";
 import { Vector } from "../MyMath.js";
 import { Order } from "../Order.js";
-import { Sprite } from "./Sprite.js";
-import { DrawableSprite } from "./DrawableSprite.js";
+import { Sprite } from "./base/Sprite.js";
+import { DrawableSprite } from "./base/DrawableSprite.js";
 
 const enum KeyEventType {
     none = 0,

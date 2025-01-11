@@ -1,8 +1,11 @@
 import { TheImage, TheMusic, TheSound } from "../AssetDefination.js";
 import { BaseImage } from "../Assets.js";
+import { Char } from "../Char.js";
 import { deg } from "../MyMath.js";
+import { Transform } from "../Transform.js";
+import { DrawTextTask } from "../graphic/DrawTextTask.js";
 import { Key, Mouse, TheInput } from "./Input.js";
-import { SCLikeSprite } from "./SCLikeSprite.js";
+import { SCLikeSprite } from "./base/SCLikeSprite.js";
 
 export class HelloSprite extends SCLikeSprite {
 
@@ -10,11 +13,12 @@ export class HelloSprite extends SCLikeSprite {
 
     update(): void {
         this.position = TheInput.mouse;
+        //this.s = Math.cos(deg(this.clock) * 3) * 2;
         this.stretch = [
             Math.cos(deg(this.clock) * 3) * 2,
             Math.sin(deg(this.clock) * 3) * 2,
         ];
-        //this.d += deg(1);
+        this.d += deg(1);
         if (this.brightness > -1) {
             this.brightness -= 0.03;
         }
@@ -44,6 +48,11 @@ export class HelloSprite extends SCLikeSprite {
                 console.log(key, TheInput.s[key]);
             }
         }*/
+    }
+
+    draw(): void {
+        super.draw();
+        new DrawTextTask(this.transform, this.camera, `你好，世界！\n我${Char.bold}操死${Char.boldEnd}你的马\n说的道理\uE001啊啊啊玛索鞋\uE002那我灭\n\uE003The quick brown fox jumps over the lazy \uE004dog.`, 20, 24, "center", "middle", Infinity, "#000000", "#ffffff", 2);
     }
 
 }
