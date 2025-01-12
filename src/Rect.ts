@@ -1,4 +1,5 @@
-import { Vector } from "./MyMath.js";
+import { rotate, Vector } from "./MyMath.js";
+import { Transform } from "./Transform.js";
 
 export class Rect {
 
@@ -200,6 +201,22 @@ export class Rect {
         } else {
             return this._getPointDist(other) < 0;
         }
+    }
+
+    /** 返回一个经过 Transform 变换的新矩形 */
+    trans(transform: Transform): Rect {
+        let [cx, cy] = rotate(this.center, transform.d);
+        cx *= transform.s * transform.sx;
+        cy *= transform.s * transform.sy;
+        cx += transform.x;
+        cy += transform.y;
+        let [sx, sy] = this.size;
+        sx *= transform.s * transform.sx;
+        sy *= transform.s * transform.sy;
+        return Rect.FromSize(
+            [cx, cy],
+            [sx, sy]
+        );
     }
 
 }

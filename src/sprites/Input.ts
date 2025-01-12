@@ -4,6 +4,7 @@ import { Vector } from "../MyMath.js";
 import { Order } from "../Order.js";
 import { Sprite } from "./base/Sprite.js";
 import { DrawableSprite } from "./base/DrawableSprite.js";
+import { TheMConsole } from "../MConsole.js";
 
 const enum KeyEventType {
     none = 0,
@@ -503,6 +504,7 @@ export class Input extends Sprite {
         this._mouseTickY = this._mouseNowY;
         this._wheelTick = this._wheelNow;
         this._wheelNow = 0;
+        TheMConsole.mouseInfo.innerText = `mouse: ${this.mouseX}, ${this.mouseY}`;
     }
 
     /** 按键被按下的一瞬间，返回 true */

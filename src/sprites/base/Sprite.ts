@@ -77,7 +77,7 @@ export class StateMachine<T = any> {
      *         if (this.clock >= 100) {
      *             sm.current = "show";
      *         }
-     *     },
+     *     }.bind(this),
      *     show: (sm) => {
      *         sing();
      *         dance();
@@ -87,7 +87,7 @@ export class StateMachine<T = any> {
      *         this.doOnce(() => this.addTimeTask(2.5 * 365, (task) => {
      *             sm.switch("stop");
      *         }));
-     *     },
+     *     }.bind(this),
      *     stop: (sm) => {}
      * });
      */
@@ -184,5 +184,8 @@ export abstract class Sprite {
             return { result: func(), isFullfiled: true }
         }
     }
+
+    /** 如果 isDebug 为 true，每帧结束后都会调用此函数 */
+    debug() {}
 
 }

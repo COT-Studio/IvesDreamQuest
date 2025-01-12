@@ -171,6 +171,8 @@ export class DrawTextTask extends DrawTask {
         const fontScale = Math.abs(ct.s * ct.sx);
         ctx.lineWidth = (this.strokeWidth ? this.strokeWidth : 1) * fontScale;
         let fontSize = Math.abs(this.fontSize * fontScale);
+        if (this.strokeColor) { ctx.strokeStyle = this.strokeColor; }
+        if (this.color) { ctx.fillStyle = this.color; }
 
         let isBold = false;
         let isItalic = false;
@@ -262,11 +264,9 @@ export class DrawTextTask extends DrawTask {
                     }
                     // 绘制
                     if (this.strokeColor) {
-                        ctx.strokeStyle = this.strokeColor;
                         ctx.strokeText(text, px, py);
                     };
                     if (this.color) {
-                        ctx.fillStyle = this.color
                         ctx.fillText(text, px, py);
                     };
                     // 变亮
@@ -274,11 +274,9 @@ export class DrawTextTask extends DrawTask {
                         ctx.filter = "contrast(0) brightness(2)";
                         ctx.globalAlpha = brightness;
                         if (this.strokeColor) {
-                            ctx.strokeStyle = this.strokeColor;
                             ctx.strokeText(text, px, py);
                         };
                         if (this.color) {
-                            ctx.fillStyle = this.color;
                             ctx.fillText(text, px, py);
                         };
                     }

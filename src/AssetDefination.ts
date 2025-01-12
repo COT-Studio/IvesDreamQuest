@@ -1,6 +1,6 @@
 import { img, msc, snd } from "./Assets.js";
 
-export const TheEmptyImage = img("__empty__.png");
+export const TheEmptyImage = img("__null__.png");
 
 export const TheImage = {
     bg: {

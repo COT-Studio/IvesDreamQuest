@@ -1,6 +1,7 @@
 import { TheViewport } from "./graphic/Viewport.js";
 import { Sprite } from "./sprites/base/Sprite.js";
 import { DrawableSprite } from "./sprites/base/DrawableSprite.js";
+import { isDebug } from "./Main.js";
 
 
 /** 
@@ -45,9 +46,19 @@ export class SpritePool {
     draw() {
         for (let i = 0; i < this.sprites.length; i++) {
             let sprite = this.sprites[i];
-            if (!(sprite instanceof DrawableSprite)) { continue }
-            if (sprite.isShow && sprite.isInViewport(TheViewport) && sprite.isLive) {
-                sprite.draw();
+            if (sprite instanceof DrawableSprite) {
+                if (sprite.isShow && sprite.isInViewport(TheViewport) && sprite.isLive) {
+                    sprite.draw();
+                }
+            }
+        }
+    }
+
+    debug() {
+        for (let i = 0; i < this.sprites.length; i++) {
+            let sprite = this.sprites[i];
+            if (sprite.isLive) {
+                sprite.debug();
             }
         }
     }

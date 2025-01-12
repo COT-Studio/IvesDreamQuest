@@ -20,7 +20,6 @@ export class HelloSprite extends SCLikeSprite {
     }
 
     update(): void {
-        console.log(this.drawTextTask.transform == this.drawTask.transform);
         this.position = TheInput.mouse;
         //this.s = Math.cos(deg(this.clock) * 3) * 2;
         this.stretch = [

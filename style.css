@@ -1,13 +1,17 @@
 body {
-    margin: 0;
+    margin: 10px;
     cursor: default;
     background-color: azure;
 }
 
 #TheCanvas {
-    margin: 10px;
     border: 1px solid #000000;
     background-color: white;
+}
+
+#TheMConsole {
+    background-color: white;
+    font-family: 'consolas', 'Courier New', Courier, monospace;
 }
 
 /*

@@ -20,4 +20,8 @@ export abstract class DrawableSprite extends Sprite {
         return true;
     }
 
+    debug() {
+        super.debug();
+    }
+
 }

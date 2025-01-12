@@ -1,6 +1,7 @@
 import { TheEmptyImage as TheNullImage } from "../../AssetDefination.js";
 import { BaseImage } from "../../Assets.js";
 import { Camera, TheMainCamera } from "../../graphic/Camera.js";
+import { DrawDebugRectTask } from "../../graphic/DrawDebugRectTask.js";
 import { IDrawEffects, DrawImageTask, DrawTask } from "../../graphic/DrawTask.js";
 import { Layer } from "../../Layer.js";
 import { Vector } from "../../MyMath.js";
@@ -9,29 +10,28 @@ import { Rect } from "../../Rect.js";
 import { Transform } from "../../Transform.js";
 import { DrawableSprite } from "./DrawableSprite.js";
 
-/** 内置一个 transform 的 DrawableSprite。
- * 因为不想起太长的名字，像 DrawableSpriteWithATransform 啥的，
+/** 内置一个 transform 的 DrawableSprite。  
+ * 因为不想起太长的名字，像 DrawableSpriteWithATransform 啥的，  
  * 所以就根据我的个人经历，起了这么一个简洁形象的名字：类似SC的角色。
  */
-
 export abstract class SCLikeSprite extends DrawableSprite {
 
-    drawTask: DrawImageTask;
+    drawImageTask: DrawImageTask;
 
     get transform(): Transform {
-        return this.drawTask.transform;
+        return this.drawImageTask.transform;
     }
 
     set transform(v: Transform) {
-        this.drawTask.transform = v;
+        this.drawImageTask.transform = v;
     }
     
     get camera(): Camera {
-        return this.drawTask.camera;
+        return this.drawImageTask.camera;
     }
 
     set camera(v: Camera) {
-        this.drawTask.camera = v;
+        this.drawImageTask.camera = v;
     }
 
     get x() { return this.transform.x; }
@@ -57,11 +57,11 @@ export abstract class SCLikeSprite extends DrawableSprite {
     set d(v) { this.transform.d = v; }
 
     get drawEffects(): IDrawEffects {
-        return this.drawTask.effects;
+        return this.drawImageTask.effects;
     }
 
     set drawEffects(v: IDrawEffects) {
-        this.drawTask.effects = v;
+        this.drawImageTask.effects = v;
     }
 
     get ghost() { return this.drawEffects.ghost || 0; }
@@ -70,38 +70,42 @@ export abstract class SCLikeSprite extends DrawableSprite {
     set brightness(v: number) { this.drawEffects.brightness = v; }
 
     get costume(): BaseImage {
-        return this.drawTask.image;
+        return this.drawImageTask.image;
     }
 
     set costume(v: BaseImage) {
-        this.drawTask.image = v;
+        this.drawImageTask.image = v;
     }
 
     get layer(): Layer {
-        return this.drawTask.layer;
+        return this.drawImageTask.layer;
     }
     
     set layer(v: Layer) {
-        this.drawTask.layer = v;
+        this.drawImageTask.layer = v;
     }
 
     get subLayer(): number {
-        return this.drawTask.subLayer;
+        return this.drawImageTask.subLayer;
     }
     
     set subLayer(v: number) {
-        this.drawTask.subLayer = v;
+        this.drawImageTask.subLayer = v;
     }
 
-    hitBox: Rect = new Rect([0, 0], [0, 0]);
+    rect: Rect = new Rect([-20, -20], [20, 20]);
+
+    get hitBox(): Rect {
+        return this.rect.trans(this.transform);
+    }
 
     constructor(order: Order = Order.end, subOrder: number = 0) {
         super(order, subOrder);
-        this.drawTask = new DrawImageTask(new Transform(), TheMainCamera, TheNullImage, Layer.top, 0, {});
+        this.drawImageTask = new DrawImageTask(new Transform(), TheMainCamera, TheNullImage, Layer.top, 0, {});
     }
 
     draw(): void {
-        this.drawTask.queue();
+        this.drawImageTask.queue();
     }
 
     /** 该矩形是否接触另一个角色、矩形或点（包括搭边） */
@@ -120,6 +124,11 @@ export abstract class SCLikeSprite extends DrawableSprite {
         } else {
             return this.hitBox.isHit(other);
         }
+    }
+
+    debug() {
+        super.debug();
+        new DrawDebugRectTask(this.transform, this.camera, this.rect).queue();
     }
 
 }
