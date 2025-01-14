@@ -1,5 +1,5 @@
 import { Transform } from "../Transform.js";
-import * as Coord from "../MyMath.js";
+import { minArc, rotate } from "../MyMath.js";
 import { Vector } from "../MyMath.js";
 
 export class Camera extends Transform {
@@ -50,7 +50,7 @@ export class Camera extends Transform {
         y -= this.y;
         x *= this.s * this.sx;
         y *= this.s * this.sy;
-        return Coord.rotate([x, y], this.d, this.position);
+        return rotate([x, y], this.d, this.position);
     }
 
     /** 计算一个缩放被摄像机拍摄到 Viewport 后的缩放 */
@@ -66,12 +66,12 @@ export class Camera extends Transform {
 
     /** 计算一个方向被摄像机拍摄到 Viewport 后的方向 */
     captureDirection(direction: number): number {
-        return Coord.minArc(direction, this.d);
+        return minArc(direction, this.d);
     }
 
     /** 把该相机“拍摄”的一个点从 Viewport 坐标系转换为 Stage 坐标系 */
     uncapturePosition(position: Vector): Vector {
-        let [x, y] = Coord.rotate(position, -this.d, this.position);
+        let [x, y] = rotate(position, -this.d, this.position);
         x /= this.s * this.sx;
         y /= this.s * this.sy;
         x += this.x;

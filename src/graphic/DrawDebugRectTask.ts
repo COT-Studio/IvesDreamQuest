@@ -24,6 +24,7 @@ export class DrawDebugRectTask extends DrawTask {
     draw(): void {
         const ct = this.camera.capture(this.transform);
         const t = TheCanvasManager.viewportToCanvas(ct, TheViewport);
+        t.sy *= -1;
         const ctx = TheCanvasManager.ctx;
         const { x1, y1, w, h } = this.rect.trans(t);
         ctx.save();

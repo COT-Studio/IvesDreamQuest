@@ -3,8 +3,8 @@ import { TheViewport, Viewport } from "../graphic/Viewport.js";
 import { Vector } from "../MyMath.js";
 import { Order } from "../Order.js";
 import { Sprite } from "./base/Sprite.js";
-import { DrawableSprite } from "./base/DrawableSprite.js";
 import { TheMConsole } from "../MConsole.js";
+import { TheSpritePool } from "../SpritePool.js";
 
 const enum KeyEventType {
     none = 0,
@@ -408,11 +408,11 @@ export class Input extends Sprite {
         document.addEventListener("keydown", ev => this._setKeyEventType(ev.code, true));
         document.addEventListener("keyup", ev => this._setKeyEventType(ev.code, false));
 
-        TheCanvasManager.canvas.addEventListener("mousedown", ev => this._handleMouseClick(ev, true));
-        TheCanvasManager.canvas.addEventListener("mouseup", ev => this._handleMouseClick(ev, false));
+        document.addEventListener("mousedown", ev => this._handleMouseClick(ev, true));
+        document.addEventListener("mouseup", ev => this._handleMouseClick(ev, false));
 
-        TheCanvasManager.canvas.addEventListener("mousemove", ev => this._handleMouseMove(ev, true));
-        TheCanvasManager.canvas.addEventListener("mouseleave", ev => this._handleMouseMove(ev, false));
+        document.addEventListener("mousemove", ev => this._handleMouseMove(ev, true));
+        document.addEventListener("mouseleave", ev => this._handleMouseMove(ev, false));
 
         document.addEventListener("wheel", ev => this._wheelNow -= Math.sign(ev.deltaY))
     }
@@ -504,7 +504,7 @@ export class Input extends Sprite {
         this._mouseTickY = this._mouseNowY;
         this._wheelTick = this._wheelNow;
         this._wheelNow = 0;
-        TheMConsole.mouseInfo.innerText = `mouse: ${this.mouseX}, ${this.mouseY}`;
+        TheMConsole.mouseInfoDiv.innerText = `mouse: ${this.mouseX}, ${this.mouseY}`;
     }
 
     /** 按键被按下的一瞬间，返回 true */
@@ -542,3 +542,4 @@ export class Input extends Sprite {
 }
 
 export const TheInput = new Input();
+TheSpritePool.push(TheInput);

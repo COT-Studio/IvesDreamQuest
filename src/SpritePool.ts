@@ -1,8 +1,6 @@
 import { TheViewport } from "./graphic/Viewport.js";
 import { Sprite } from "./sprites/base/Sprite.js";
 import { DrawableSprite } from "./sprites/base/DrawableSprite.js";
-import { isDebug } from "./Main.js";
-
 
 /** 
  * 如果 < 0，则 a 在 b 前面；如果 > 0，则 a 在 b 后面。

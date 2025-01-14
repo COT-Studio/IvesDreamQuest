@@ -6,6 +6,7 @@ import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { TheCanvasManager } from "./Canvas.js";
 import { AssetLoadState, BaseImage } from "../Assets.js";
+import { TheImages } from "../AssetDefination.js";
 
 /**
  * Stage 中有许多的 Transform，表示各种对象的位置、缩放等信息。

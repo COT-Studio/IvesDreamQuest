@@ -1,4 +1,3 @@
-import { TheSpritePool } from "../../SpritePool.js";
 import { Order } from "../../Order.js";
 import { TheClock } from "../../Clock.js";
 
@@ -143,7 +142,6 @@ export abstract class Sprite {
     constructor(order: Order = Order.end, subOrder: number = 0) {
         this.order = order;
         this.subOrder = subOrder;
-        TheSpritePool.push(this);
 
         this._isLive = true;
         this.isActive = true;

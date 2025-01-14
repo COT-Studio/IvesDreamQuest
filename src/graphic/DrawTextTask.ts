@@ -82,7 +82,6 @@ export class DrawTextTask extends DrawTask {
         ctx.textAlign = alignX;
         ctx.textBaseline = alignY;
         ctx.font = getFontText(false, false, this.fontSize);
-        console.log();
         let linesAutoN: partString[][] = [];
         for (let row of linesMagic) {
             let x = 0;

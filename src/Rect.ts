@@ -99,7 +99,7 @@ export class Rect {
 
     /** 宽度 */
     get w() {
-        return Math.abs(this.x2 - this.x1);
+        return this.x2 - this.x1;
     }
 
     set w(v: number) {
@@ -111,7 +111,7 @@ export class Rect {
 
     /** 高度 */
     get h() {
-        return Math.abs(this.y2 - this.y1);
+        return this.y2 - this.y1;
     }
 
     set h(v: number) {
@@ -147,7 +147,7 @@ export class Rect {
     }
 
     set cy(v: number) {
-        const t = this.w / 2;
+        const t = this.h / 2;
         this._y1 = v - t;
         this._y2 = v + t;
     }
@@ -171,7 +171,7 @@ export class Rect {
     static FromSize(center: Vector, size: Vector) {
         const [x, y] = center;
         const [w, h] = size;
-        return new Rect([x - w, y - h], [x + w, y + h]);
+        return new Rect([x - w / 2, y - h / 2], [x + w / 2, y + h / 2]);
     }
 
     private _getRectDist(other: Rect): number {
@@ -215,7 +215,7 @@ export class Rect {
         sy *= transform.s * transform.sy;
         return Rect.FromSize(
             [cx, cy],
-            [sx, sy]
+            [Math.abs(sx), Math.abs(sy)]
         );
     }
 

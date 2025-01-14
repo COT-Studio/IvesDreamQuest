@@ -1,4 +1,4 @@
-import { TheImage, TheMusic, TheSound } from "../AssetDefination.js";
+import { TheImages, TheMusics, TheSounds } from "../AssetDefination.js";
 import { BaseImage } from "../Assets.js";
 import { Char } from "../Char.js";
 import { deg } from "../MyMath.js";
@@ -13,7 +13,7 @@ export class HelloSprite extends SCLikeSprite {
 
     constructor() {
         super();
-        this.costume = TheImage.test;
+        this.costume = TheImages.test;
         this.drawTextTask = new DrawTextTask(this.transform, this.camera,
             `你好，世界！\n我${Char.bold}操死${Char.boldEnd}你的马\n说的道理\uE001啊啊啊玛索鞋\uE002那我灭\n\uE003The quick brown fox jumps over the lazy \uE004dog.`,
             10, 12, "center", "middle", 210, "#000000", "#ffffff", 2);
@@ -32,9 +32,9 @@ export class HelloSprite extends SCLikeSprite {
         }
         if (TheInput.isShortClick(Mouse.Any) || TheInput.isLongRelease(Key.Space)) {
             this.brightness = 1.2;
-            TheSound.hit[2].play();
+            TheSounds.hit[2].play();
         }
-        const mus = TheMusic.ives_dream
+        const mus = TheMusics.ives_dream
         this.doOnce(() => {
             this.addTimeTask(180, task => mus.play(), 1);
             this.addTask(task => TheInput.isShortClick(Key.KeyP), task => {

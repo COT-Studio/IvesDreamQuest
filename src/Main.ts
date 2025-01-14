@@ -1,25 +1,22 @@
+import "./Requires.js";
+
 import { TheCanvasManager } from "./graphic/Canvas.js";
 import { TheDrawTaskQueue } from "./graphic/DrawTaskQueue.js";
 import { TheSpritePool } from "./SpritePool.js";
-import { HelloSprite } from "./sprites/HelloSprite.js";
 import { TheClock } from "./Clock.js";
-import { Background } from "./sprites/Background.js";
-
-export let isDebug: boolean = true;
+import { DebugOptions } from "./DebugOptions.js";
 
 /** 每两帧之间的最小时间间隔（毫秒）*/
 const frameDelay: number = 17;
 /** fps指示器 */
 export let fps: number = 1000 / frameDelay;
-export const TheHelloSprite = new HelloSprite();
-export const TheBackground = new Background();
 
 function update() {
     //进行一帧的更新
     let t = Date.now();
     TheSpritePool.update();
     TheSpritePool.draw();
-    if (isDebug) TheSpritePool.debug();
+    if (DebugOptions.isDebug) TheSpritePool.debug();
     TheCanvasManager.ctx.clearRect(0, 0, TheCanvasManager.width, TheCanvasManager.height);
     TheDrawTaskQueue.draw();
     TheDrawTaskQueue.clear();
@@ -34,4 +31,7 @@ function main() {
     update();
 };
 
-window.addEventListener("load", main);
+TheCanvasManager.ctx.font = "30px sans-serif";
+TheCanvasManager.ctx.fillText("请点击……", 20, 50);
+
+window.addEventListener("load", () => window.addEventListener("click", main, {once: true}), {once: true});
