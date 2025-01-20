@@ -19,7 +19,7 @@ export class HelloSprite extends SCLikeSprite {
             10, 12, "center", "middle", 210, "#000000", "#ffffff", 2);
     }
 
-    update(): void {
+    update() {
         this.position = TheInput.mouse;
         //this.s = Math.cos(deg(this.clock) * 3) * 2;
         this.stretch = [
@@ -58,7 +58,7 @@ export class HelloSprite extends SCLikeSprite {
         }*/
     }
 
-    draw(): void {
+    draw() {
         super.draw();
         this.drawTextTask.queue();
     }

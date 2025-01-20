@@ -11,8 +11,8 @@ function orderSort(a: Sprite, b: Sprite): number {
 
 export class SpritePool {
 
-    readonly sprites: Sprite[];
-    readonly useOrder: boolean;
+    sprites: Sprite[];
+    useOrder: boolean;
 
     constructor(useOrder: boolean = true) {
         this.sprites = [];
@@ -32,8 +32,10 @@ export class SpritePool {
 
     // 注意：新角色在生成的那一帧就会更新一次
     update() {
-        for (let i = 0; i < this.sprites.length; i++) {
-            let sprite = this.sprites[i];
+        let snapshot = [...this.sprites];
+        for (let i = 0; i < snapshot.length; i++) {
+            let sprite = snapshot[i];
+            if (!sprite) { continue; }
             if (sprite.isActive && sprite.isLive) {
                 sprite.baseUpdate();
                 sprite.update();
@@ -42,6 +44,7 @@ export class SpritePool {
     }
 
     draw() {
+        // 注意！！！如果在 draw 的过程中插入新角色会导致迭代器死循环！！！
         for (let i = 0; i < this.sprites.length; i++) {
             let sprite = this.sprites[i];
             if (sprite instanceof DrawableSprite) {
@@ -59,6 +62,12 @@ export class SpritePool {
                 sprite.debug();
             }
         }
+    }
+
+    clean() {
+        const liveCheck = (sprite: Sprite) => sprite.isLive;
+        if(this.sprites.every(liveCheck)) { return; }
+        this.sprites = this.sprites.filter(liveCheck);
     }
 
 }

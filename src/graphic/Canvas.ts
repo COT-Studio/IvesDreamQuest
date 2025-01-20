@@ -103,8 +103,17 @@ export class CanvasManager {
         );
     }
 
+    /** 把一个点从 Viewport 坐标系（笛卡尔坐标系）转换为 Canvas 坐标系（屏幕坐标系）*/
+    viewportToCanvasPoint(position: Vector, viewport: Viewport): Vector {
+        let [px, py] = position;
+        let {width: vx, height: vy} = viewport;
+        let {width: cx, height: cy} = this;
+        let s = cy / vy;
+        return [(vx / 2 + px) * s, (vy / 2 - py) * s]
+    }
+
     /** 把一个点从 Canvas 坐标系（屏幕坐标系）转换为 Viewport 坐标系（笛卡尔坐标系）*/
-    canvasToViewport(position: Vector, viewport: Viewport) {
+    canvasToViewportPoint(position: Vector, viewport: Viewport) {
         let [px, py] = position;
         let {width: vx, height: vy} = viewport;
         let {width: cx, height: cy} = this;
@@ -114,6 +123,7 @@ export class CanvasManager {
 
 }
 
-export const TheCanvasManager = new CanvasManager(1280, 720);
+//export const TheCanvasManager = new CanvasManager(1280, 720);
+export const TheCanvasManager = new CanvasManager(960, 540);
 TheCanvasManager.canvas.id = "TheCanvas";
 document.body.appendChild(TheCanvasManager.canvas);

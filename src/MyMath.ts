@@ -43,3 +43,18 @@ export function minArc(arc1: number, arc2: number = 0): number {
 export function clamp(num: number, a: number, b: number): number {
     return Math.max(a, Math.min(num, b));
 }
+
+/** 返回从 a 到 b 在 t 位置的线性插值结果，t∈[0, 1]时，返回值∈[a, b] */
+export function linear(a: number, b: number, t: number) {
+    return a + (b - a) * t;
+}
+
+/** 返回 [a, b) 之间的随机浮点数 */
+export function random(a: number, b: number) {
+    return a + (b - a) * Math.random();
+}
+
+/** 返回 [a, b) 之间的随机整数 */
+export function randint(a: number, b: number) {
+    return Math.floor(random(a, b));
+}

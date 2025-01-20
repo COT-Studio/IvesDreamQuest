@@ -1,5 +1,6 @@
 dist/*
 .vscode
 实体键码表.txt
+敌人尺寸.txt
 *.sb3
 web.config

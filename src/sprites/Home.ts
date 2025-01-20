@@ -3,6 +3,9 @@ import { Layer } from "../Layer.js";
 import { Order } from "../Order.js";
 import { TheSpritePool } from "../SpritePool.js";
 import { SCLikeSprite } from "./base/SCLikeSprite.js";
+import { Stickman } from "./enemies/Stickman.js";
+import { Tiger } from "./enemies/Tiger.js";
+import { Key, TheInput } from "./Input.js";
 
 
 export class Home extends SCLikeSprite {
@@ -16,7 +19,16 @@ export class Home extends SCLikeSprite {
         this.costume = TheImages.home.normal_assistant;
     }
 
-    update() {}
+    update() {
+        if(TheInput.isDown(Key.KeyS)) {
+            const stickman = new Stickman();
+            TheSpritePool.push(stickman);
+        }
+        if(TheInput.isDown(Key.KeyT)) {
+            const stickman = new Tiger();
+            TheSpritePool.push(stickman);
+        }
+    }
 
 }
 

@@ -5,6 +5,7 @@ export const enum Order {
     begin_keybind,
     begin_bg,
     weapon,
+    enemy,
     home,
     end
 }

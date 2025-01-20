@@ -457,14 +457,13 @@ export class Input extends Sprite {
         const height = TheCanvasManager.clientHeight;
         const sx = TheCanvasManager.width / width;
         const sy = TheCanvasManager.height / height;
-        [this._mouseNowX, this._mouseNowY] = TheCanvasManager.canvasToViewport([
+        [this._mouseNowX, this._mouseNowY] = TheCanvasManager.canvasToViewportPoint([
             (ev.clientX - left) / sx,
             (ev.clientY - top) / sy,
         ], TheViewport);
-        this.isMouseActive = this.isActive;
     }
 
-    update(): void {
+    update() {
         for (const key of ActiveButtons) {
             switch (this._keyEventType[key]) {
                 case KeyEventType.none:
@@ -502,6 +501,11 @@ export class Input extends Sprite {
         }
         this._mouseTickX = this._mouseNowX;
         this._mouseTickY = this._mouseNowY;
+        this.isMouseActive = 
+            TheViewport.width / -2 < this.mouseX && 
+            TheViewport.width / 2 > this.mouseX && 
+            TheViewport.height / -2 < this.mouseY && 
+            TheViewport.height / 2 > this.mouseY;
         this._wheelTick = this._wheelNow;
         this._wheelNow = 0;
         TheMConsole.mouseInfoDiv.innerText = `mouse: ${this.mouseX}, ${this.mouseY}`;

@@ -94,9 +94,10 @@ export abstract class SCLikeSprite extends DrawableSprite {
     }
 
     rect: Rect = new Rect([-20, -20], [20, 20]);
+    private _hitbox: Rect = new Rect([-20, -20], [20, 20]);
 
-    get hitBox(): Rect {
-        return this.rect.trans(this.transform);
+    get hitbox(): Rect {
+        return this.rect.trans(this.transform, this._hitbox);
     }
 
     constructor(order: Order = Order.end, subOrder: number = 0) {
@@ -104,25 +105,27 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask = new DrawImageTask(new Transform(), TheMainCamera, TheNullImage, Layer.top, 0, {});
     }
 
-    draw(): void {
+    update() {}
+
+    draw() {
         this.drawImageTask.queue();
     }
 
     /** 该矩形是否接触另一个角色、矩形或点（包括搭边） */
     isTouch(other: Rect | Vector | SCLikeSprite) {
         if (other instanceof SCLikeSprite) {
-            return this.hitBox.isTouch(other.hitBox);
+            return this.hitbox.isTouch(other.hitbox);
         } else {
-            return this.hitBox.isTouch(other);
+            return this.hitbox.isTouch(other);
         }
     }
 
     /** 该矩形是否碰到了另一个矩形或点（不包括搭边） */
     isHit(other: Rect | Vector | SCLikeSprite) {
         if (other instanceof SCLikeSprite) {
-            return this.hitBox.isHit(other.hitBox);
+            return this.hitbox.isHit(other.hitbox);
         } else {
-            return this.hitBox.isHit(other);
+            return this.hitbox.isHit(other);
         }
     }
 

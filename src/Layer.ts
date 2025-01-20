@@ -2,6 +2,7 @@
 export const enum Layer {
     top,
     weapon,
+    enemy,
     home,
     bottom
 }

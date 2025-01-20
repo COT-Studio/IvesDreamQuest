@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="42.25" height="105.5" viewBox="0.5 0.25 42.25 105.5">
+  <defs>
+    <linearGradient id="grad_1" y2="1" x2="0">
+      <stop offset="0" stop-color="#222121" stop-opacity="1"/>
+      <stop offset="1" stop-color="#222121" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="grad_2" y2="1" x2="0">
+      <stop offset="0" stop-color="#222121" stop-opacity="1"/>
+      <stop offset="1" stop-color="#222121" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="grad_3" y2="1" x2="0">
+      <stop offset="0" stop-color="#222121" stop-opacity="1"/>
+      <stop offset="1" stop-color="#222222" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="grad_4" y2="1" x2="0">
+      <stop offset="0" stop-color="#222121" stop-opacity="1"/>
+      <stop offset="1" stop-color="#222222" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <!-- Exported by Scratch - http://scratch.mit.edu/ -->
+  <path id="ID0.8733048806898296" fill="none" stroke="url(#grad_1)" stroke-width="4" stroke-linecap="round" d="M 24.5 35.5 L 25 62 L 24.5 82.5 L 35.75 103.25 "/>
+  <path id="ID0.902496051043272" fill="none" stroke="url(#grad_2)" stroke-width="4" stroke-linecap="round" d="M 25.5 63.5 L 18.25 83.5 L 11.25 103.75 "/>
+  <path id="ID0.9654328003525734" fill="none" stroke="url(#grad_3)" stroke-width="4" stroke-linecap="round" d="M 22 36.5 L 13.5 50.5 L 2.5 45.5 "/>
+  <path id="ID0.34103725478053093" fill="none" stroke="url(#grad_4)" stroke-width="4" stroke-linecap="round" d="M 26.75 38 L 35.5 50 L 24.5 55.25 "/>
+  <g id="ID0.0797002580948174">
+    <path id="ID0.6990905008278787" fill="#F3F3F3" stroke="#222121" stroke-width="4" d="M 23.75 2.25 C 28.44 2.25 32.69 4.099 35.768 7.086 C 38.845 10.073 40.75 14.198 40.75 18.75 C 40.75 23.302 38.845 27.427 35.768 30.414 C 32.69 33.401 28.44 35.25 23.75 35.25 C 19.06 35.25 14.81 33.401 11.732 30.414 C 8.655 27.427 6.75 23.302 6.75 18.75 C 6.75 14.198 8.655 10.073 11.732 7.086 C 14.81 4.099 19.06 2.25 23.75 2.25 Z "/>
+    <path id="ID0.9670177856460214" fill="#FFFFFF" stroke="none" stroke-linecap="round" d="M 23.05 5.75 C 25.702 5.487 30.087 6.534 30.65 8.15 C 31.1 9.442 26.468 9.757 25.05 11.35 C 23.537 13.053 22.617 15.362 22.05 17.5 C 21.51 19.557 21.734 21.811 21.25 23.85 C 20.704 26.151 20.71 30.02 18.75 30.5 C 16.63 31.02 14.07 28.006 12.75 25.85 C 11.307 23.495 10.368 20.502 10.75 17.75 C 11.178 14.679 12.823 11.566 15.05 9.35 C 17.137 7.272 20.129 5.916 23.05 5.75 Z " stroke-width="1"/>
+    <path id="ID0.7083160383626819" fill="#E7E7E7" stroke="none" stroke-linecap="round" d="M 34.4 12 C 35.358 13.592 36.765 17.149 36.55 19.85 C 36.349 22.379 34.99 24.848 33.4 26.85 C 32.238 28.312 30.322 29.244 28.55 30 C 27.302 30.532 25.054 31.354 24.25 30.75 C 23.658 30.299 25.289 28.694 26.05 27.85 C 28.089 25.585 30.935 23.877 32.55 21.25 C 33.617 19.517 33.605 17.22 34.05 15.15 C 34.222 14.134 33.992 11.336 34.4 12 Z " stroke-width="1"/>
+  </g>
+</svg><!--rotationCenter:25:52-->

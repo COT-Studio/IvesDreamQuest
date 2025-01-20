@@ -3,122 +3,122 @@ import { Transform } from "./Transform.js";
 
 export class Rect {
 
-    private _x1: number;
-    private _y1: number;
+    x1: number;
+    y1: number;
 
-    private _x2: number;
-    private _y2: number;
+    x2: number;
+    y2: number;
 
     /** 左边界 */
-    get x1() {
-        return Math.min(this._x1, this._x2);
+    get left() {
+        return Math.min(this.x1, this.x2);
     }
 
-    set x1(v: number) {
-        if (this._x1 <= this._x2) {
-            this._x1 = v;
+    set left(v: number) {
+        if (this.x1 <= this.x2) {
+            this.x1 = v;
         } else {
-            this._x2 = v;
+            this.x2 = v;
         }
     }
 
     /** 下边界 */
-    get y1() {
-        return Math.min(this._y1, this._y2);
+    get bottom() {
+        return Math.min(this.y1, this.y2);
     }
 
-    set y1(v: number) {
-        if (this._y1 <= this._y2) {
-            this._y1 = v;
+    set bottom(v: number) {
+        if (this.y1 <= this.y2) {
+            this.y1 = v;
         } else {
-            this._y2 = v;
+            this.y2 = v;
         }
     }
 
     /** 右边界 */
-    get x2() {
-        return Math.max(this._x1, this._x2);
+    get right() {
+        return Math.max(this.x1, this.x2);
     }
 
-    set x2(v: number) {
-        if (this._x1 > this._x2) {
-            this._x1 = v;
+    set right(v: number) {
+        if (this.x1 > this.x2) {
+            this.x1 = v;
         } else {
-            this._x2 = v;
+            this.x2 = v;
         }
     }
 
     /** 上边界 */
-    get y2() {
-        return Math.max(this._y1, this._y2);
+    get top() {
+        return Math.max(this.y1, this.y2);
     }
 
-    set y2(v: number) {
-        if (this._y1 > this._y2) {
-            this._y1 = v;
+    set top(v: number) {
+        if (this.y1 > this.y2) {
+            this.y1 = v;
         } else {
-            this._y2 = v;
+            this.y2 = v;
         }
     }
 
     /** 右上角 */
     get p1(): Vector {
-        return [this.x2, this.y2];
+        return [this.right, this.top];
     }
     
     set p1(v: Vector) {
-        [this.x2, this.y2] = v;
+        [this.right, this.top] = v;
     }
 
     /** 左上角 */
     get p2(): Vector {
-        return [this.x1, this.y2];
+        return [this.left, this.top];
     }
     
     set p2(v: Vector) {
-        [this.x1, this.y2] = v;
+        [this.left, this.top] = v;
     }
 
     /** 左下角 */
     get p3(): Vector {
-        return [this.x1, this.y1];
+        return [this.left, this.bottom];
     }
     
     set p3(v: Vector) {
-        [this.x1, this.y1] = v;
+        [this.left, this.bottom] = v;
     }
 
     /** 右下角 */
     get p4(): Vector {
-        return [this.x2, this.y1];
+        return [this.right, this.bottom];
     }
     
     set p4(v: Vector) {
-        [this.x2, this.y1] = v;
+        [this.right, this.bottom] = v;
     }
 
     /** 宽度 */
     get w() {
-        return this.x2 - this.x1;
+        return this.right - this.left;
     }
 
     set w(v: number) {
         const t = Math.abs(v / 2);
         const cx = this.cx;
-        this._x1 = cx - t;
-        this._x2 = cx + t;
+        this.x1 = cx - t;
+        this.x2 = cx + t;
     }
 
     /** 高度 */
     get h() {
-        return this.y2 - this.y1;
+        return this.top - this.bottom;
     }
 
     set h(v: number) {
         const t = Math.abs(v / 2);
         const cy = this.cy;
-        this._y1 = cy - t;
-        this._y2 = cy + t;
+        this.y1 = cy - t;
+        this.y2 = cy + t;
     }
 
     /** 宽高 */
@@ -132,24 +132,24 @@ export class Rect {
 
     /** 中心点X */
     get cx() {
-        return (this.x1 + this.x2) / 2;
+        return (this.left + this.right) / 2;
     }
 
     set cx(v: number) {
         const t = this.w / 2;
-        this._x1 = v - t;
-        this._x2 = v + t;
+        this.x1 = v - t;
+        this.x2 = v + t;
     }
 
     /** 中心点Y */
     get cy() {
-        return (this.y1 + this.y2) / 2;
+        return (this.bottom + this.top) / 2;
     }
 
     set cy(v: number) {
         const t = this.h / 2;
-        this._y1 = v - t;
-        this._y2 = v + t;
+        this.y1 = v - t;
+        this.y2 = v + t;
     }
 
     /** 中心点 */
@@ -163,8 +163,8 @@ export class Rect {
 
     /** 从两个端点构造一个矩形 */
     constructor(p1: Vector, p2: Vector) {
-        [this._x1, this._y1] = p1;
-        [this._x2, this._y2] = p2;
+        [this.x1, this.y1] = p1;
+        [this.x2, this.y2] = p2;
     }
 
     /** 通过中心点和宽高构造一个矩形 */
@@ -204,7 +204,8 @@ export class Rect {
     }
 
     /** 返回一个经过 Transform 变换的新矩形 */
-    trans(transform: Transform): Rect {
+    trans(transform: Transform, target?: Rect): Rect {
+        const result = target || new Rect([0, 0], [0, 0]);
         let [cx, cy] = rotate(this.center, transform.d);
         cx *= transform.s * transform.sx;
         cy *= transform.s * transform.sy;
@@ -213,10 +214,9 @@ export class Rect {
         let [sx, sy] = this.size;
         sx *= transform.s * transform.sx;
         sy *= transform.s * transform.sy;
-        return Rect.FromSize(
-            [cx, cy],
-            [Math.abs(sx), Math.abs(sy)]
-        );
+        result.center = [cx, cy];
+        result.size = [sx, sy];
+        return result;
     }
 
 }

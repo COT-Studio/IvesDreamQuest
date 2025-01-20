@@ -62,8 +62,8 @@ export class Weapon extends SCLikeSprite {
         }
 
         // 攻击逻辑
-        const isHold = TheInput.isHold(Mouse.Left) || TheInput.isHold(Key.Space);
-        const isClick = TheInput.isDown(Mouse.Left) || TheInput.isDown(Key.Space);
+        const isHold = (TheInput.isHold(Mouse.Left) || TheInput.isHold(Key.Space)) && TheInput.isMouseActive;
+        const isClick = (TheInput.isDown(Mouse.Left) || TheInput.isDown(Key.Space)) && TheInput.isMouseActive;
         let leftSide = -230;
         let topSide = 120;
         switch (this.weapon) {
@@ -116,13 +116,13 @@ export class Weapon extends SCLikeSprite {
         }
 
         this.position = [
-            clamp(this.x, leftSide, 320),
+            clamp(this.x, leftSide, 310),
             clamp(this.y, -180, topSide)
         ];
     }
 
     private _checkKeySwitchWeapon(key: Key, weapon: WeaponName) {
-        if (TheInput.isDown(key)) {
+        if (TheInput.isDown(key) && TheInput.isMouseActive) {
             this.targetWeapon = weapon;
         }
     }

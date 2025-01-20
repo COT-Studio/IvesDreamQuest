@@ -17,6 +17,7 @@ function update() {
     TheSpritePool.update();
     TheSpritePool.draw();
     if (DebugOptions.isDebug) TheSpritePool.debug();
+    if (TheClock.tick % 60 == 0) TheSpritePool.clean();
     TheCanvasManager.ctx.clearRect(0, 0, TheCanvasManager.width, TheCanvasManager.height);
     TheDrawTaskQueue.draw();
     TheDrawTaskQueue.clear();

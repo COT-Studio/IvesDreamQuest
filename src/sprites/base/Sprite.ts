@@ -150,7 +150,7 @@ export abstract class Sprite {
         this._doOnceFlags = new Set<string | null>;
     }
 
-    baseUpdate(): void {
+    baseUpdate() {
         for (const task of this.tasks) {
             task.update();
         }
