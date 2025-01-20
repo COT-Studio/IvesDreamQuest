@@ -5,26 +5,58 @@ import { TheDrawTaskQueue } from "./graphic/DrawTaskQueue.js";
 import { TheSpritePool } from "./SpritePool.js";
 import { TheClock } from "./Clock.js";
 import { DebugOptions } from "./DebugOptions.js";
+import { TheMConsole } from "./MConsole.js";
 
 /** 每两帧之间的最小时间间隔（毫秒）*/
 const frameDelay: number = 17;
-/** fps指示器 */
-export let fps: number = 1000 / frameDelay;
 
+const pm: { name: string, timeStamp: number }[] = []
+
+function pmMark(name: string) {
+    if (!DebugOptions.isPerformanceMonitor) { return; }
+    pm.push({name: name, timeStamp: performance.now()})
+}
+
+let lastT = Date.now();
+
+/** 进行一帧的更新 */
 function update() {
-    //进行一帧的更新
     let t = Date.now();
+    //console.log(lastT - t);
+    lastT = t;
+    pmMark("supdate");
     TheSpritePool.update();
+    pmMark("sdraw");
     TheSpritePool.draw();
+    pmMark("sdebug");
     if (DebugOptions.isDebug) TheSpritePool.debug();
+    pmMark("sclean");
     if (TheClock.tick % 60 == 0) TheSpritePool.clean();
+    pmMark("cdraw");
     TheCanvasManager.ctx.clearRect(0, 0, TheCanvasManager.width, TheCanvasManager.height);
     TheDrawTaskQueue.draw();
     TheDrawTaskQueue.clear();
+    pmMark("windup");
     t = Date.now() - t;
     setTimeout(update, Math.max(frameDelay - t, 0));
-    fps = 1000 / Math.max(frameDelay, t);
     TheClock.step();
+    pmMark("end");
+    if (DebugOptions.isPerformanceMonitor) {
+        let report = "";
+        let total = 0;
+        for (let i = 0; i < pm.length - 1; i++) {
+            let dt = pm[i + 1].timeStamp - pm[i].timeStamp;
+            let dts = dt.toString();
+            report += `${pm[i].name}\t${dts.slice(0, dts.indexOf(".") + 4)}\n`;
+            total += dt;
+        }
+        let ts = total.toString();
+        report += `total\t${ts.slice(0, ts.indexOf(".") + 4)}`;
+        TheMConsole.performanceMonitorDiv.innerText = report;
+        if (total > 3) {console.log(total);}
+    }
+    pm.length = 0;
+    pmMark("last");
 }
 
 function main() {

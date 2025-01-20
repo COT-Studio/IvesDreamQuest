@@ -18,6 +18,7 @@ export abstract class SCLikeSprite extends DrawableSprite {
 
     drawImageTask: DrawImageTask;
 
+    /** 该角色的变换 */
     get transform(): Transform {
         return this.drawImageTask.transform;
     }
@@ -26,6 +27,7 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.transform = v;
     }
     
+    /** 该角色绑定的摄像机 */
     get camera(): Camera {
         return this.drawImageTask.camera;
     }
@@ -34,28 +36,37 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.camera = v;
     }
 
+    /** 横坐标 */
     get x() { return this.transform.x; }
     set x(v) { this.transform.x = v; }
+    /** 纵坐标 */
     get y() { return this.transform.y; }
     set y(v) { this.transform.y = v; }
 
+    /** 位置 */
     get position() { return this.transform.position; }
     set position(v) { this.transform.position = v; }
 
+    /** 缩放 */
     get s() { return this.transform.s; }
     set s(v) { this.transform.s = v; }
 
+    /** 横向拉伸 */
     get sx() { return this.transform.sx; }
     set sx(v) { this.transform.sx = v; }
+    /** 纵向拉伸 */
     get sy() { return this.transform.sy; }
     set sy(v) { this.transform.sy = v; }
 
+    /** 拉伸 */
     get stretch() { return this.transform.stretch; }
     set stretch(v) { this.transform.stretch = v; }
 
+    /** 方向 */
     get d() { return this.transform.d; }
     set d(v) { this.transform.d = v; }
 
+    /** 外观特效 */
     get drawEffects(): IDrawEffects {
         return this.drawImageTask.effects;
     }
@@ -64,11 +75,14 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.effects = v;
     }
 
+    /** 虚像特效 */
     get ghost() { return this.drawEffects.ghost || 0; }
     set ghost(v: number) { this.drawEffects.ghost = v; }
+    /** 高亮特效 */
     get brightness() { return this.drawEffects.brightness || 0; }
     set brightness(v: number) { this.drawEffects.brightness = v; }
 
+    /** 角色的造型，即它的外观图像 */
     get costume(): BaseImage {
         return this.drawImageTask.image;
     }
@@ -77,6 +91,7 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.image = v;
     }
 
+    /** 图层 */
     get layer(): Layer {
         return this.drawImageTask.layer;
     }
@@ -85,6 +100,7 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.layer = v;
     }
 
+    /** 子图层 */
     get subLayer(): number {
         return this.drawImageTask.subLayer;
     }
@@ -93,9 +109,11 @@ export abstract class SCLikeSprite extends DrawableSprite {
         this.drawImageTask.subLayer = v;
     }
 
+    /** 判定范围（相对） */
     rect: Rect = new Rect([-20, -20], [20, 20]);
     private _hitbox: Rect = new Rect([-20, -20], [20, 20]);
 
+    /** 判定范围（绝对） */
     get hitbox(): Rect {
         return this.rect.trans(this.transform, this._hitbox);
     }

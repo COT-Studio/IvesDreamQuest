@@ -24,7 +24,7 @@ export const TheImages = {
         cutter1: img("weapon/SoulCutter-Hit.svg"),
     },
     home: {
-        normal_assistant: img("home/NA.svg")
+        normal_assistant: img("home/NA.svg"),
     },
     enemy: {
         stickman: [
@@ -36,6 +36,7 @@ export const TheImages = {
         ],
         tiger: {
             normal: img("enemy/tiger/TI-1.svg"),
+            simple: img("enemy/tiger/TI-2.svg"),
         }
     },
     test: img("test.png"),

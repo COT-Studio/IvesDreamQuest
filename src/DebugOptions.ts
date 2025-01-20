@@ -1,6 +1,5 @@
 
-export let DebugOptions: {
-    isDebug: boolean;
-} = {
+export const DebugOptions = {
     isDebug: false,
+    isPerformanceMonitor: false,
 };

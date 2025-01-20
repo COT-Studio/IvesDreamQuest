@@ -30,7 +30,7 @@ export class SpritePool {
         this.sprites.push(sprite);
     }
 
-    // 注意：新角色在生成的那一帧就会更新一次
+    // 注意：新角色在生成的那一帧不会更新
     update() {
         let snapshot = [...this.sprites];
         for (let i = 0; i < snapshot.length; i++) {

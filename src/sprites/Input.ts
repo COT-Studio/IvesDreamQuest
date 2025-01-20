@@ -458,8 +458,8 @@ export class Input extends Sprite {
         const sx = TheCanvasManager.width / width;
         const sy = TheCanvasManager.height / height;
         [this._mouseNowX, this._mouseNowY] = TheCanvasManager.canvasToViewportPoint([
-            (ev.clientX - left) / sx,
-            (ev.clientY - top) / sy,
+            (ev.clientX - left + scrollX) / sx,
+            (ev.clientY - top + scrollY) / sy,
         ], TheViewport);
     }
 

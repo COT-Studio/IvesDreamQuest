@@ -38,7 +38,6 @@ export class Level {
     getWaysDist(rect: Rect, ways: Way[]) {
         const temp = ways.map(way => this.getWayDist(rect, way));
         temp.push(-Infinity);
-        console.log(temp);
         return Math.max(...temp);
     }
 

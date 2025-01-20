@@ -5,6 +5,8 @@ export class MConsole {
     readonly mouseInfoDiv: HTMLDivElement;
     readonly debugSwitchDiv: HTMLDivElement;
     readonly debugSwitch: HTMLInputElement;
+    readonly performanceMonitorSwitch: HTMLInputElement;
+    readonly performanceMonitorDiv: HTMLDivElement;
     readonly inputDiv: HTMLDivElement;
     readonly inputs: { [key: string]: HTMLInputElement };
     readonly textareaDiv: HTMLDivElement;
@@ -21,11 +23,30 @@ export class MConsole {
         this.debugSwitchDiv = document.createElement("div");
         this.debugSwitchDiv.id = "TheDebugSwitchDiv";
         this.debugSwitchDiv.style.userSelect = "none";
-        this.debugSwitch = document.createElement("input");
-        this.debugSwitch.id = "TheDebugSwitch";
-        this.debugSwitch.type = "checkbox";
-        this.debugSwitch.checked = false;
-        this.debugSwitch.addEventListener("change", () => DebugOptions.isDebug = this.debugSwitch.checked);
+
+        const createDebugCheckbox = (id: string, checked: boolean, onchange: (checked: boolean) => any) => {
+            const e = document.createElement("input");
+            e.id = id;
+            e.type = "checkbox";
+            e.checked = checked;
+            e.addEventListener("change", () => onchange(e.checked));
+            return e;
+        }
+
+        this.debugSwitch = createDebugCheckbox("TheDebugSwitch", DebugOptions.isDebug, (checked) => DebugOptions.isDebug = checked);
+        this.performanceMonitorSwitch = createDebugCheckbox(
+            "ThePerformanceMonitorSwitch",
+            DebugOptions.isPerformanceMonitor,
+            (checked) => {
+                DebugOptions.isPerformanceMonitor = checked;
+                this.performanceMonitorDiv.style.display = checked ? "block" : "none";
+            }
+        );
+
+        this.performanceMonitorDiv = document.createElement("div");
+        this.performanceMonitorDiv.id = "ThePerformanceMonitorDiv";
+        this.performanceMonitorDiv.style.whiteSpace = "pre-wrap";
+        this.performanceMonitorDiv.style.fontFamily = "monospace";
 
         this.inputDiv = document.createElement("div");
         this.inputDiv.id = "TheInputDiv";
@@ -35,12 +56,18 @@ export class MConsole {
         this.textareaDiv.id = "TheTextAreaDiv";
         this.textareas = {};
         
-        this.debugSwitchDiv.appendChild(this.debugSwitch);
-        const isDebugText = document.createTextNode("isDebug");
-        this.debugSwitchDiv.appendChild(isDebugText);
+        const appendDebugSwitch = (ele: HTMLInputElement, txt: string) => {
+            this.debugSwitchDiv.appendChild(ele);
+            const textNode = document.createTextNode(txt);
+            this.debugSwitchDiv.appendChild(textNode);
+        }
+
+        appendDebugSwitch(this.debugSwitch, "debug");
+        appendDebugSwitch(this.performanceMonitorSwitch, "performance monitor");
 
         this.mConsole.appendChild(this.mouseInfoDiv);
         this.mConsole.appendChild(this.debugSwitchDiv);
+        this.mConsole.appendChild(this.performanceMonitorDiv);
         this.mConsole.appendChild(this.inputDiv);
         this.mConsole.appendChild(this.textareaDiv);
 

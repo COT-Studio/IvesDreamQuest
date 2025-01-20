@@ -25,8 +25,8 @@ export const TheLevelManager = new LevelManager();
 TheLevelManager.goto(TheLevels["1-0"]);
 
 const TheLevelInput = TheMConsole.addInput("level");
-const TheGroundInput = TheMConsole.addTextarea("grounds", 5, 80);
-const TheWaterWayInput = TheMConsole.addTextarea("waterways", 5, 80);
+const TheGroundInput = TheMConsole.addTextarea("grounds", 5, 40);
+const TheWaterWayInput = TheMConsole.addTextarea("waterways", 5, 40);
 
 TheLevelInput.addEventListener("dblclick", () => {
     // @ts-ignore
@@ -36,9 +36,9 @@ TheLevelInput.addEventListener("dblclick", () => {
 });
 
 TheGroundInput.addEventListener("dblclick", () => {
-    TheLevelManager.level.grounds = TheGroundInput.value.split("\n").map(points => Way.FromVector(...eval(`[${points}]`)));
+    TheLevelManager.level.grounds = TheGroundInput.value.split(";").map(points => Way.FromVector(...eval(`[${points}]`)));
 });
 
 TheWaterWayInput.addEventListener("dblclick", () => {
-    TheLevelManager.level.waterWays = TheWaterWayInput.value.split("\n").map(points => Way.FromVector(...eval(`[${points}]`)));
+    TheLevelManager.level.waterWays = TheWaterWayInput.value.split(";").map(points => Way.FromVector(...eval(`[${points}]`)));
 });

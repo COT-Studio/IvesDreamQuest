@@ -6,6 +6,7 @@ import "./graphic/DrawTextTask.js";
 import "./graphic/DrawTaskQueue.js";
 import "./graphic/Viewport.js";
 
+import "./level/Way.js";
 import "./level/Level.js";
 import "./level/LevelDefination.js";
 import "./level/LevelManager.js";
@@ -19,7 +20,7 @@ import "./sprites/enemies/Stickman.js";
 import "./sprites/enemies/Tiger.js";
 
 import "./sprites/Background.js";
-import "./sprites/HelloSprite.js";
+//import "./sprites/HelloSprite.js";
 import "./sprites/Input.js";
 import "./sprites/Weapon.js";
 import "./sprites/Home.js";
