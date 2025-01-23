@@ -5,7 +5,7 @@ import { Viewport } from "./Viewport.js";
 export class CanvasManager {
 
     readonly canvas: HTMLCanvasElement;
-    readonly ctx: CanvasRenderingContext2D;
+    //readonly ctx: CanvasRenderingContext2D;
     private _width: number;
     private _height: number;
     private _rect?: DOMRect;
@@ -63,14 +63,14 @@ export class CanvasManager {
         this._width = width;
         this._height = height;
         this._updateSize();
-        this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+        /*this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
         try {
             if (this.ctx == null) {
                 throw new Error("null canvas ctx.");
             }
         } catch (error) {
             console.warn("未知错误：尝试获取 Canvas 绘图上下文时，获取到的值为 null。");
-        }
+        }*/
         this._resizeObserver = new ResizeObserver(() => {
             this._rect = undefined;
             this._clientLeft = undefined;

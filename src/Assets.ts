@@ -1,3 +1,5 @@
+// @ts-ignore
+import * as Pixi from "pixi";
 import { clamp } from "./MyMath.js";
 
 export const enum AssetLoadState {
@@ -22,7 +24,7 @@ abstract class Asset {
     abstract load(): this;
 
 }
-
+/*
 export class BaseImage extends Asset {
 
     readonly image: HTMLImageElement;
@@ -51,6 +53,42 @@ export class BaseImage extends Asset {
         this._loadState = AssetLoadState.Loading;
         this.image.addEventListener("load", ev => this._loadState = AssetLoadState.Ready);
         this.image.addEventListener("error", ev => this._loadState = AssetLoadState.Fail);
+        return this;
+    }
+
+}
+*/
+export class PixiImage extends Asset {
+
+    texture: any;
+    private _src: string;
+    private _loadState: AssetLoadState;
+
+    get loadState(): AssetLoadState {
+        return this._loadState;
+    }
+
+    constructor(src: string) {
+        super();
+        this._src = src;
+        this._loadState = AssetLoadState.Idle
+    }
+
+    load() {
+        if (this.loadState == AssetLoadState.Loading || this.loadState == AssetLoadState.Ready) {
+            return this;
+        }
+        this._loadState = AssetLoadState.Loading;
+        Pixi.Assets.load(this._src).then(
+            (result: any) => {
+                this.texture = result;
+                this._loadState = AssetLoadState.Ready;
+            },
+            (error: any) => {
+                this._loadState = AssetLoadState.Fail;
+                console.warn(`Pixi loader error: fail to load image "${this._src}"`);
+            }
+        );
         return this;
     }
 
@@ -444,8 +482,8 @@ export class Music extends AbstractAudio {
  * 加载一张贴图。
  * @param url 图片在 image 文件夹中的路径。
  */
-export function img(url: ImageURL): BaseImage {
-    return new BaseImage("../assets/image/" + url);
+export function img(url: ImageURL): PixiImage {
+    return new PixiImage("../assets/image/" + url);
 }
 
 /**

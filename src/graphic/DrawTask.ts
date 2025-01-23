@@ -5,8 +5,9 @@ import { clamp } from "../MyMath.js";
 import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { TheCanvasManager } from "./Canvas.js";
-import { AssetLoadState, BaseImage } from "../Assets.js";
+import { AssetLoadState, PixiImage } from "../Assets.js";
 import { TheImages } from "../AssetDefination.js";
+import { ThePixiManager } from "./pixi/PixiManager.js";
 
 /**
  * Stage 中有许多的 Transform，表示各种对象的位置、缩放等信息。
@@ -49,10 +50,10 @@ export class DrawImageTask extends DrawTask {
 
     transform: Transform;
     camera: Camera;
-    image: BaseImage;
+    image: PixiImage;
     effects: IDrawEffects;
 
-    constructor(transform: Transform, camera: Camera, image: BaseImage,
+    constructor(transform: Transform, camera: Camera, image: PixiImage,
         layer: Layer = Layer.top, subLayer: number = 0, effects: IDrawEffects = {}) {
         super(layer, subLayer);
         this.transform = transform;
@@ -82,39 +83,7 @@ export class DrawImageTask extends DrawTask {
 
         const t = this.camera.capture(this.transform);
         const ct = TheCanvasManager.viewportToCanvas(t, TheViewport);
-        const {x, y, s, sx, sy, d} = ct;
-        const w = img.image.width * s * sx;
-        const h = img.image.height * s * sy;
 
-        const ctx = TheCanvasManager.ctx;
-        ctx.save();
-        // 变换
-        ctx.translate(x, y);
-        ctx.rotate(-d);
-        // 翻转
-        if (w < 0 && h < 0) {
-            ctx.transform(-1, 0, 0, -1, 0, 0);
-        } else if (w < 0) {
-            ctx.transform(-1, 0, 0, 1, 0, 0);
-        } else if (h < 0) {
-            ctx.transform(1, 0, 0, -1, 0, 0);
-        }
-        // 透明度
-        if (ghost) {
-            ctx.globalAlpha = 1 - ghost;
-        }
-        // 变暗
-        if (brightness < 0) {
-            ctx.filter = `brightness(${brightness + 1})`;
-        }
-        // 绘制
-        ctx.drawImage(img.image, -w / 2, -h / 2, w, h);
-        // 变亮
-        if (brightness > 0) {
-            ctx.filter = "contrast(0) brightness(2)";
-            ctx.globalAlpha = brightness;
-            ctx.drawImage(img.image, -w / 2, -h / 2, w, h);
-        }
-        ctx.restore();
+        ThePixiManager.drawImage(ct, this.image);
     }
 };

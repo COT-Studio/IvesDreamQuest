@@ -6,9 +6,10 @@ import { TheSpritePool } from "./SpritePool.js";
 import { TheClock } from "./Clock.js";
 import { DebugOptions } from "./DebugOptions.js";
 import { TheMConsole } from "./MConsole.js";
+import { ThePixiManager } from "./graphic/pixi/PixiManager.js";
 
 /** 每两帧之间的最小时间间隔（毫秒）*/
-const frameDelay: number = 17;
+const frameDelay: number = 16;
 
 const pm: { name: string, timeStamp: number }[] = []
 
@@ -33,9 +34,11 @@ function update() {
     pmMark("sclean");
     if (TheClock.tick % 60 == 0) TheSpritePool.clean();
     pmMark("cdraw");
-    TheCanvasManager.ctx.clearRect(0, 0, TheCanvasManager.width, TheCanvasManager.height);
+    //TheCanvasManager.ctx.clearRect(0, 0, TheCanvasManager.width, TheCanvasManager.height);
+    ThePixiManager.clear();
     TheDrawTaskQueue.draw();
     TheDrawTaskQueue.clear();
+    ThePixiManager.render();
     pmMark("windup");
     t = Date.now() - t;
     setTimeout(update, Math.max(frameDelay - t, 0));
@@ -53,7 +56,6 @@ function update() {
         let ts = total.toString();
         report += `total\t${ts.slice(0, ts.indexOf(".") + 4)}`;
         TheMConsole.performanceMonitorDiv.innerText = report;
-        if (total > 3) {console.log(total);}
     }
     pm.length = 0;
     pmMark("last");
@@ -63,8 +65,8 @@ function main() {
     console.log("Game Main Started.");
     update();
 };
-
+/*
 TheCanvasManager.ctx.font = "30px sans-serif";
 TheCanvasManager.ctx.fillText("请点击……", 20, 50);
-
+*/
 window.addEventListener("load", () => window.addEventListener("click", main, {once: true}), {once: true});

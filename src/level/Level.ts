@@ -1,15 +1,15 @@
-import { BaseImage } from "../Assets.js";
+import { PixiImage } from "../Assets.js";
 import { Rect } from "../Rect.js";
 import { Way } from "./Way.js";
 
 export class Level {
 
     readonly name: string;
-    readonly bg: BaseImage;
+    readonly bg: PixiImage;
     grounds: Way[];
     waterWays: Way[];
 
-    constructor(name: string, bg: BaseImage, grounds: Way[], waterWays: Way[]) {
+    constructor(name: string, bg: PixiImage, grounds: Way[], waterWays: Way[]) {
         this.name = name;
         this.bg = bg;
         this.grounds = grounds;

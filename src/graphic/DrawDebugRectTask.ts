@@ -21,7 +21,7 @@ export class DrawDebugRectTask extends DrawTask {
         this.color = color;
     }
 
-    draw() {
+    draw() {/*
         const ct = this.camera.capture(this.transform);
         const t = TheCanvasManager.viewportToCanvas(ct, TheViewport);
         t.sy *= -1;
@@ -34,7 +34,7 @@ export class DrawDebugRectTask extends DrawTask {
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 2;
         ctx.strokeRect(x1, y1, w, h);
-        ctx.restore();
+        ctx.restore();*/
     }
 
 }

@@ -34,7 +34,7 @@ export class DrawDebugWayTask extends DrawTask {
         ctx.closePath();
     }
 
-    draw() {
+    draw() {/*
         if (!this.way.points.length) { return; }
         const ctx = TheCanvasManager.ctx;
         ctx.save();
@@ -44,7 +44,7 @@ export class DrawDebugWayTask extends DrawTask {
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 2;
         this._draw(ctx);
-        ctx.restore();
+        ctx.restore();*/
     }
 
 }

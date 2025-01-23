@@ -1,5 +1,5 @@
 import { TheEmptyImage as TheNullImage } from "../../AssetDefination.js";
-import { BaseImage } from "../../Assets.js";
+import { PixiImage } from "../../Assets.js";
 import { Camera, TheMainCamera } from "../../graphic/Camera.js";
 import { DrawDebugRectTask } from "../../graphic/DrawDebugRectTask.js";
 import { IDrawEffects, DrawImageTask, DrawTask } from "../../graphic/DrawTask.js";
@@ -83,11 +83,11 @@ export abstract class SCLikeSprite extends DrawableSprite {
     set brightness(v: number) { this.drawEffects.brightness = v; }
 
     /** 角色的造型，即它的外观图像 */
-    get costume(): BaseImage {
+    get costume(): PixiImage {
         return this.drawImageTask.image;
     }
 
-    set costume(v: BaseImage) {
+    set costume(v: PixiImage) {
         this.drawImageTask.image = v;
     }
 

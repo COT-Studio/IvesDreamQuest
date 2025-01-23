@@ -50,16 +50,18 @@ export class DrawTextTask extends DrawTask {
         super(layer, subLayer);
         this.transform = transform;
         this.camera = camera;
+        this.lines = [];
         this.fontSize = fontSize;
         this.lineHeight = lineHeight;
         this.alignX = alignX;
         this.alignY = alignY;
         this.width = width > 0 ? width : Infinity;
+        this.height = 0;
         this.color = color;
         this.strokeColor = strokeColor;
         this.strokeWidth = strokeWidth;
         this.effects = effects;
-
+/*
         // 计算文本信息
         // 此处用\g\i\b\w指代各种特殊字符
         // "离离原上\g草\i、一岁一\g枯荣\i。\w\r\n野火烧不尽、\b春风\i吹又生。"
@@ -126,11 +128,11 @@ export class DrawTextTask extends DrawTask {
         // ["野火烧不尽、"],
         // ["\b", "春风", "\i", "吹又生。"]]
         this.lines = linesAutoN;
-        this.height = this.lines.length * lineHeight;
+        this.height = this.lines.length * lineHeight;*/
     }
 
     draw() {
-
+/*
         if (!this.color && !this.strokeColor) { return; }
         let ghost = this.effects.ghost || 0;
         ghost = clamp(ghost, 0, 1);
@@ -250,7 +252,7 @@ export class DrawTextTask extends DrawTask {
                         ctx.filter = "contrast(0) brightness(2)";
                         ctx.globalAlpha = brightness;
                         ctx.drawImage(img.image, -w / 2, -h / 2, w, h);
-                    }*/
+                    }*//*
                 } else {
                     // 普通文段
                     // 透明度
@@ -284,7 +286,7 @@ export class DrawTextTask extends DrawTask {
             }
             py += this.lineHeight * Math.abs(ct.s * ct.sy);
         }
-        ctx.restore();
+        ctx.restore();*/
     }
 
 }
