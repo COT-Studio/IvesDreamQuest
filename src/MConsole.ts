@@ -81,6 +81,7 @@ export class MConsole {
         input.placeholder = name;
         input.size = size;
         this.inputDiv.appendChild(input);
+        this.inputs[name] = input;
         return input;
     }
 
@@ -92,6 +93,7 @@ export class MConsole {
         textarea.rows = rows;
         textarea.cols = cols;
         this.textareaDiv.appendChild(textarea);
+        this.textareas[name] = textarea;
         return textarea;
     }
 }

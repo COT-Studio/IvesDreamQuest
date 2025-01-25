@@ -123,7 +123,7 @@ export class CanvasManager {
 
 }
 
-//export const TheCanvasManager = new CanvasManager(1280, 720);
-export const TheCanvasManager = new CanvasManager(960, 540);
+export const TheCanvasManager = new CanvasManager(1280, 720);
+//export const TheCanvasManager = new CanvasManager(640, 360);
 TheCanvasManager.canvas.id = "TheCanvas";
 document.body.appendChild(TheCanvasManager.canvas);

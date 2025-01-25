@@ -7,7 +7,7 @@ import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { TheCanvasManager } from "./Canvas.js";
 import { AssetLoadState, PixiImage } from "../Assets.js";
 import { TheImages } from "../AssetDefination.js";
-import { ThePixiManager } from "./pixi/PixiManager.js";
+import { ThePixiManager } from "./PixiManager.js";
 
 /**
  * Stage 中有许多的 Transform，表示各种对象的位置、缩放等信息。
@@ -84,6 +84,6 @@ export class DrawImageTask extends DrawTask {
         const t = this.camera.capture(this.transform);
         const ct = TheCanvasManager.viewportToCanvas(t, TheViewport);
 
-        ThePixiManager.drawImage(ct, this.image);
+        ThePixiManager.drawImage(ct, this.image, this.effects);
     }
 };

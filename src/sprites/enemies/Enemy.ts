@@ -1,4 +1,5 @@
 import { DrawDebugRectTask } from "../../graphic/DrawDebugRectTask.js";
+import { Viewport } from "../../graphic/Viewport.js";
 import { Layer } from "../../Layer.js";
 import { TheLevelManager } from "../../level/LevelManager.js";
 import { random } from "../../MyMath.js";
@@ -62,7 +63,16 @@ export abstract class Enemy extends SCLikeSprite {
 
     debug() {
         super.debug();
-        new DrawDebugRectTask(this.transform, this.camera, this.physicsRect, "#77dd00").queue();
+        new DrawDebugRectTask(this.transform, this.camera, this.physicsRect, 0x77dd00).queue();
+    }
+
+    isInViewport(viewport: Viewport): boolean {
+        const { width, height } = viewport;
+        const w = width / 2 + 200;
+        const h = height / 2 + 200;
+        const x = Math.abs(this.x);
+        const y = Math.abs(this.y);
+        return ((x < w) && (y < h))
     }
 
 }

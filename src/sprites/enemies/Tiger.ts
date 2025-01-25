@@ -16,7 +16,8 @@ export class Tiger extends Enemy {
         this.s = 0.35;
         this.costume = this._cos.normal;
         this.rect.size = [100, 120];
-        this.physicsRect.size = [50, 120];
+        this.physicsRect.size = [80, 120];
+        this.physicsRect.y2 -= 60;
         this.autoSpawn();
     }
 

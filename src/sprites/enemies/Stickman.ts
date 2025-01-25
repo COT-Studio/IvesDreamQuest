@@ -15,6 +15,7 @@ export class Stickman extends Enemy {
         this.s = 0.6;
         this.rect.size = [40, 100];
         this.physicsRect.size = [40, 100];
+        this.physicsRect.y2 -= 50;
         this.autoSpawn();
     }
 

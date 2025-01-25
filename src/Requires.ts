@@ -1,4 +1,4 @@
-import "./graphic/pixi/PixiManager.js";
+import "./graphic/PixiManager.js";
 
 import "./graphic/Camera.js";
 import "./graphic/Canvas.js";

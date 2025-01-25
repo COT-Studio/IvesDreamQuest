@@ -4,6 +4,7 @@ import { Transform } from "../Transform.js";
 import { Camera } from "./Camera.js";
 import { TheCanvasManager } from "./Canvas.js";
 import { DrawTask } from "./DrawTask.js";
+import { ThePixiManager } from "./PixiManager.js";
 import { TheViewport } from "./Viewport.js";
 
 export class DrawDebugRectTask extends DrawTask {
@@ -11,9 +12,9 @@ export class DrawDebugRectTask extends DrawTask {
     transform: Transform;
     camera: Camera;
     rect: Rect;
-    color: string;
+    color: number
 
-    constructor(transform: Transform, camera: Camera, rect: Rect, color: string = "#00ff00") {
+    constructor(transform: Transform, camera: Camera, rect: Rect, color: number = 0x00ff00) {
         super(Layer.top);
         this.transform = transform;
         this.camera = camera;
@@ -21,20 +22,13 @@ export class DrawDebugRectTask extends DrawTask {
         this.color = color;
     }
 
-    draw() {/*
+    draw() {
         const ct = this.camera.capture(this.transform);
         const t = TheCanvasManager.viewportToCanvas(ct, TheViewport);
         t.sy *= -1;
-        const ctx = TheCanvasManager.ctx;
-        const { left: x1, bottom: y1, w, h } = this.rect.trans(t);
-        ctx.save();
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 4;
-        ctx.strokeRect(x1, y1, w, h);
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x1, y1, w, h);
-        ctx.restore();*/
+        const cr = this.rect.trans(t);
+        ThePixiManager.drawRect(cr, 4, 0xffffff);
+        ThePixiManager.drawRect(cr, 2, this.color);
     }
 
 }

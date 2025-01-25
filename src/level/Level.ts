@@ -15,7 +15,7 @@ export class Level {
         this.grounds = grounds;
         this.waterWays = waterWays;
         for (const way of waterWays) {
-            way.drawDebugWayTask.color = "#00ffff";
+            way.drawDebugWayTask.color = 0x00ffff;
         }
     }
 

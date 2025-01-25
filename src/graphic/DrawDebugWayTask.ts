@@ -3,48 +3,37 @@ import { Way } from "../level/Way.js";
 import { Camera } from "./Camera.js";
 import { TheCanvasManager } from "./Canvas.js";
 import { DrawTask } from "./DrawTask.js";
+import { ThePixiManager } from "./PixiManager.js";
 import { TheViewport } from "./Viewport.js";
 
 export class DrawDebugWayTask extends DrawTask {
 
     camera: Camera;
     way: Way;
-    color: string;
+    color: number;
 
-    constructor(camera: Camera, way: Way, color: string = "#dddd00") {
+    constructor(camera: Camera, way: Way, color: number = 0xdddd00) {
         super(Layer.top);
         this.camera = camera;
         this.way = way;
         this.color = color;
     }
 
-    private _draw(ctx: CanvasRenderingContext2D) {
+    private _draw(width: number, color: number) {
         const points = this.way.points;
-        ctx.beginPath();
+        const cPoints = [];
         for (const point of points) {
             const cp = this.camera.capturePosition(point);
             const p = TheCanvasManager.viewportToCanvasPoint(cp, TheViewport);
-            if (point == points[0]) {
-                ctx.moveTo(...p);
-            } else {
-                ctx.lineTo(...p);
-            }
+            cPoints.push({ x: p[0], y: p[1] });
         }
-        ctx.stroke();
-        ctx.closePath();
+        ThePixiManager.drawWay(cPoints, width, color);
     }
 
-    draw() {/*
+    draw() {
         if (!this.way.points.length) { return; }
-        const ctx = TheCanvasManager.ctx;
-        ctx.save();
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 4;
-        this._draw(ctx);
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 2;
-        this._draw(ctx);
-        ctx.restore();*/
+        this._draw(4, 0xffffff);
+        this._draw(2, this.color);
     }
 
 }
