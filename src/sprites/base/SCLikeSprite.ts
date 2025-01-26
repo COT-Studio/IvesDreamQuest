@@ -1,4 +1,4 @@
-import { TheEmptyImage as TheNullImage } from "../../AssetDefination.js";
+import { TheEmptyImage } from "../../AssetDefination.js";
 import { PixiImage } from "../../Assets.js";
 import { Camera, TheMainCamera } from "../../graphic/Camera.js";
 import { DrawDebugRectTask } from "../../graphic/DrawDebugRectTask.js";
@@ -120,7 +120,7 @@ export abstract class SCLikeSprite extends DrawableSprite {
 
     constructor(order: Order = Order.end, subOrder: number = 0) {
         super(order, subOrder);
-        this.drawImageTask = new DrawImageTask(new Transform(), TheMainCamera, TheNullImage, Layer.top, 0, {});
+        this.drawImageTask = new DrawImageTask(new Transform(), TheMainCamera, TheEmptyImage, Layer.top, 0, {});
     }
 
     update() {}

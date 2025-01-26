@@ -36,7 +36,6 @@ export const TheImages = {
         ],
         tiger: {
             normal: img("enemy/tiger/TI-1.svg"),
-            simple: img("enemy/tiger/TI-2.svg"),
         }
     },
     test: img("test.png"),
