@@ -39,7 +39,6 @@ function update() {
     TheDrawTaskQueue.draw();
     const dtql = TheDrawTaskQueue.tasks.length;
     TheDrawTaskQueue.clear();
-    ThePixiManager.render();
     pmMark("windup");
     t = Date.now() - t;
     setTimeout(update, Math.max(frameDelay - t, 0));

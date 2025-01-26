@@ -1,4 +1,3 @@
-// @ts-ignore
 import * as PIXI from "pixi";
 import { CanvasManager, TheCanvasManager } from "./Canvas.js";
 import { Transform } from "../Transform.js";
@@ -11,7 +10,7 @@ console.log(`正在使用Pixi.js，Pixi版本: ${PIXI.VERSION}`);
 
 export class PixiManager {
 
-    readonly app;
+    readonly app: PIXI.Application;
 
     constructor(canvasManager: CanvasManager) {
         this.app = new PIXI.Application();
@@ -20,12 +19,12 @@ export class PixiManager {
             width: canvasManager.width,
             height: canvasManager.height,
             background: 0xffffff,
-            antialias: false,
         });
     }
 
     drawImage(transform: Transform, image: PixiImage, effects: IDrawEffects) {
         if (image.loadState != AssetLoadState.Ready) { return; }
+
         const pSprite = new PIXI.Sprite(image);
 
         pSprite.anchor.set(0.5);
@@ -42,7 +41,7 @@ export class PixiManager {
             const filter = new PIXI.ColorMatrixFilter();
             const b = clamp(effects.brightness, -1, 1);
             if (b < 0) {
-                filter.brightness(b + 1);
+                filter.brightness(b + 1, false);
             } else {
                 const bm = 1 - Math.abs(b);
                 const ba = b;

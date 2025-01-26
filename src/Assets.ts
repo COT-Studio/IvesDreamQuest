@@ -1,5 +1,4 @@
-// @ts-ignore
-import * as Pixi from "pixi";
+import * as PIXI from "pixi";
 import { clamp } from "./MyMath.js";
 
 export const enum AssetLoadState {
@@ -60,7 +59,7 @@ export class BaseImage extends Asset {
 */
 export class PixiImage extends Asset {
 
-    texture: any;
+    texture: PIXI.Texture;
     private _src: string;
     private _loadState: AssetLoadState;
 
@@ -70,8 +69,10 @@ export class PixiImage extends Asset {
 
     constructor(src: string) {
         super();
+        this.texture = PIXI.Texture.EMPTY;
         this._src = src;
-        this._loadState = AssetLoadState.Idle
+        this._resolution = resolution;
+        this._loadState = AssetLoadState.Idle;
     }
 
     load() {
