@@ -6,6 +6,7 @@
         "rootDir": "./src",
         "strict": true,
         "noPropertyAccessFromIndexSignature": true,
+        "removeComments": true,
     },
     "include": ["src/**/*"]
 }

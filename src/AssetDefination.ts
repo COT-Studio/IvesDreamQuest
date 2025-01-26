@@ -35,7 +35,7 @@ export const TheImages = {
             img("enemy/stickman/SM-5.svg"),
         ],
         tiger: {
-            normal: img("enemy/tiger/TI-1.svg"),
+            normal: img("enemy/tiger/TI-1.svg", { resolution: 0.7 }),
         }
     },
     test: img("test.png"),

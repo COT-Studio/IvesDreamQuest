@@ -1,5 +1,7 @@
 import * as PIXI from "pixi";
 import { clamp } from "./MyMath.js";
+import { TheCanvasManager } from "./graphic/Canvas.js";
+import { TheViewport } from "./graphic/Viewport.js";
 
 export const enum AssetLoadState {
     /** 不可用，暂时没有开始加载，未设定其 src */
@@ -23,6 +25,7 @@ abstract class Asset {
     abstract load(): this;
 
 }
+
 /*
 export class BaseImage extends Asset {
 
@@ -57,21 +60,43 @@ export class BaseImage extends Asset {
 
 }
 */
+
+type PixiScaleMode = "linear" | "nearest";
+
+interface PixiImageConfig {
+    resolution?: number,
+    scaleMode?: PixiScaleMode,
+}
+
 export class PixiImage extends Asset {
 
     texture: PIXI.Texture;
     private _src: string;
+    private _resolution: number;
+    private _scaleMode: PixiScaleMode;
+    private _viewportToCanvasScale: number
     private _loadState: AssetLoadState;
 
     get loadState(): AssetLoadState {
         return this._loadState;
     }
 
-    constructor(src: string) {
+    get resolution(): number {
+        return this.resolution;
+    }
+
+    set resolution(resolution: number) {
+        this._resolution = resolution;
+        this._loadState = AssetLoadState.Idle;
+    }
+
+    constructor(src: string, {resolution, scaleMode}: PixiImageConfig) {
         super();
         this.texture = PIXI.Texture.EMPTY;
         this._src = src;
-        this._resolution = resolution;
+        this._resolution = resolution ?? 1;
+        this._scaleMode = scaleMode ?? "linear";
+        this._viewportToCanvasScale = TheCanvasManager.viewportToCanvasScale(TheViewport);
         this._loadState = AssetLoadState.Idle;
     }
 
@@ -80,17 +105,38 @@ export class PixiImage extends Asset {
             return this;
         }
         this._loadState = AssetLoadState.Loading;
-        Pixi.Assets.load(this._src).then(
-            (result: any) => {
+        let loadPromise: Promise<PIXI.Texture>;
+        if (this._src.endsWith(".svg")) {
+            // 加载矢量图
+            loadPromise = PIXI.loadSvg.load!(this._src, {
+                data: {
+                    resolution: this._resolution * this._viewportToCanvasScale,
+                    parseAsGraphicsContext: false, // 此值确保加载结果为 Texture，尽管 false 是默认值，但我还是显式声明一下
+                }
+            }) as Promise<PIXI.Texture>;
+        } else {
+            // 加载位图
+            loadPromise = PIXI.Assets.load<PIXI.Texture>(this._src);
+        }
+        loadPromise.then(
+            (result: PIXI.Texture) => {
+                result.source.scaleMode = this._scaleMode;
                 this.texture = result;
                 this._loadState = AssetLoadState.Ready;
             },
-            (error: any) => {
+            (error: PIXI.Texture) => {
                 this._loadState = AssetLoadState.Fail;
                 console.warn(`Pixi loader error: fail to load image "${this._src}"`);
             }
         );
         return this;
+    }
+
+    /** 重设该图像的分辨率，并重新加载该图像。
+     * 如果分辨率留空，则以相同分辨率重新加载图像，用于 canvas 尺寸发生变化时的重新加载。 */
+    resize(resolution?: number) {
+        this.resolution = resolution || this.resolution;
+        this.load();
     }
 
 }
@@ -482,9 +528,13 @@ export class Music extends AbstractAudio {
 /**
  * 加载一张贴图。
  * @param url 图片在 image 文件夹中的路径。
+ * @param resolution 矢量图光栅化分辨率（即放大倍数），默认为1。  
+ * 理想情况下，此值最好等于该贴图的常用缩放倍数。但考虑到缩放滤镜的问题，最好还是比缩放倍数稍大些。
+ * @param scaleMode 缩放滤镜，"linear"为线性过滤，"nearest"为临近取样。默认为"linear"。
+ * 注意，这个选项仅在绘制时生效，对加载没有影响。
  */
-export function img(url: ImageURL): PixiImage {
-    return new PixiImage("../assets/image/" + url);
+export function img(url: ImageURL, configs: PixiImageConfig = {}): PixiImage {
+    return new PixiImage("../assets/image/" + url, configs);
 }
 
 /**

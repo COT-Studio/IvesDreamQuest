@@ -94,13 +94,19 @@ export class CanvasManager {
     viewportToCanvas(transform: Transform, viewport: Viewport): Transform {
         let {width: vx, height: vy} = viewport;
         let {width: cx, height: cy} = this;
-        let s = cy / vy;
+        let s = this.viewportToCanvasScale(viewport);
         return new Transform(
+            // 警告：此处我也不知道是为了偷懒还是为了性能，没有引用 viewportToCanvasPoint 等方法！
             [(vx / 2 + transform.x) * s, (vy / 2 - transform.y) * s],
             transform.s * s,
             [transform.sx, transform.sy],
             transform.d
         );
+    }
+
+    /** 从Viewport 到 Canvas 的缩放倍数 */
+    viewportToCanvasScale(viewport: Viewport): number {
+        return this.height / viewport.height;
     }
 
     /** 把一个点从 Viewport 坐标系（笛卡尔坐标系）转换为 Canvas 坐标系（屏幕坐标系）*/
