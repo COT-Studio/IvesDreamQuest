@@ -12,7 +12,9 @@ export class DrawDebugRectTask extends DrawTask {
     transform: Transform;
     camera: Camera;
     rect: Rect;
-    color: number
+    color: number;
+    pStroke?: PIXI.Graphics;
+    pFill?: PIXI.Graphics;
 
     constructor(transform: Transform, camera: Camera, rect: Rect, color: number = 0x00ff00) {
         super(Layer.top);
@@ -27,8 +29,12 @@ export class DrawDebugRectTask extends DrawTask {
         const t = TheCanvasManager.viewportToCanvas(ct, TheViewport);
         t.sy *= -1;
         const cr = this.rect.trans(t);
-        ThePixiManager.drawRect(cr, 4, 0xffffff);
-        ThePixiManager.drawRect(cr, 2, this.color);
+
+        this.pStroke = ThePixiManager.getRect(cr, 4, 0xffffff, this.pStroke);
+        ThePixiManager.app.stage.addChild(this.pStroke);
+
+        this.pFill = ThePixiManager.getRect(cr, 2, this.color, this.pFill);
+        ThePixiManager.app.stage.addChild(this.pFill);
     }
 
 }

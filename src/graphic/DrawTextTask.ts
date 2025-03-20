@@ -1,6 +1,7 @@
 import { Char, ControlCharRegExp, ImageCharRegExp, MagicCharRegExp } from "../Char.js";
 import { Layer } from "../Layer.js";
 import { clamp } from "../MyMath.js";
+import * as PIXI from "../pixi.js";
 import { Transform } from "../Transform.js";
 import { Camera } from "./Camera.js";
 import { TheCanvasManager } from "./Canvas.js";

@@ -6,15 +6,14 @@ import { Layer } from "../Layer.js";
 import { TheDrawTaskQueue } from "./DrawTaskQueue.js";
 import { TheCanvasManager } from "./Canvas.js";
 import { AssetLoadState, PixiImage } from "../Assets.js";
-import { TheImages } from "../AssetDefination.js";
 import { ThePixiManager } from "./PixiManager.js";
 
 /**
- * Stage 中有许多的 Transform，表示各种对象的位置、缩放等信息。
+ * Stage（一个假想的容器） 中有许多的 Transform，表示各种对象的位置、缩放等信息。
  * 他们都需要基于一个 Camera 进行变换，Camera 会将它们“拍摄”到 Viewport 上。
  * 然后，Viewport 上记录下的画面会被显示在 Canvas 上。
  * 如果 Viewport 的尺寸与 Canvas 不符，Viewport 会被等比缩放，使其高度等于 Canvas。
- * Canvas 再经由 css 进行最后处理，显示到网页上。
+ * Canvas 再经由 css 进行最后处理，显示到屏幕上。
  */
 
 export abstract class DrawTask {
@@ -36,6 +35,8 @@ export abstract class DrawTask {
 
     abstract draw(): void;
 
+    destroy() {}
+
 }
 
 export interface IDrawEffects {
@@ -52,6 +53,7 @@ export class DrawImageTask extends DrawTask {
     camera: Camera;
     image: PixiImage;
     effects: IDrawEffects;
+    pSprite?: PIXI.Sprite;
 
     constructor(transform: Transform, camera: Camera, image: PixiImage,
         layer: Layer = Layer.top, subLayer: number = 0, effects: IDrawEffects = {}) {
@@ -84,6 +86,11 @@ export class DrawImageTask extends DrawTask {
         const t = this.camera.capture(this.transform);
         const ct = TheCanvasManager.viewportToCanvas(t, TheViewport);
 
-        ThePixiManager.drawImage(ct, this.image, this.effects);
+        this.pSprite = ThePixiManager.getSprite(ct, this.image, this.effects, this.pSprite);
+        ThePixiManager.app.stage.addChild(this.pSprite);
+    }
+
+    destroy() {
+        this.pSprite && this.pSprite.destroy();
     }
 };

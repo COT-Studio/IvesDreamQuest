@@ -11,6 +11,8 @@ export class DrawDebugWayTask extends DrawTask {
     camera: Camera;
     way: Way;
     color: number;
+    pStroke?: PIXI.Graphics;
+    pFill?: PIXI.Graphics;
 
     constructor(camera: Camera, way: Way, color: number = 0xdddd00) {
         super(Layer.top);
@@ -19,7 +21,10 @@ export class DrawDebugWayTask extends DrawTask {
         this.color = color;
     }
 
-    private _draw(width: number, color: number) {
+    draw() {
+        if (!this.way.points.length) { return; }
+
+        // 计算路径上每个点在 Viewport 上的位置
         const points = this.way.points;
         const cPoints = [];
         for (const point of points) {
@@ -27,13 +32,12 @@ export class DrawDebugWayTask extends DrawTask {
             const p = TheCanvasManager.viewportToCanvasPoint(cp, TheViewport);
             cPoints.push({ x: p[0], y: p[1] });
         }
-        ThePixiManager.drawWay(cPoints, width, color);
-    }
 
-    draw() {
-        if (!this.way.points.length) { return; }
-        this._draw(4, 0xffffff);
-        this._draw(2, this.color);
+        this.pStroke = ThePixiManager.getWay(cPoints, 4, 0xffffff, this.pStroke);
+        ThePixiManager.app.stage.addChild(this.pStroke);
+
+        this.pFill = ThePixiManager.getWay(cPoints, 2, this.color, this.pFill);
+        ThePixiManager.app.stage.addChild(this.pFill);
     }
 
 }

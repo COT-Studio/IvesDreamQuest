@@ -5,6 +5,7 @@ import { AssetLoadState, PixiImage } from "../Assets.js";
 import { IDrawEffects } from "./DrawTask.js";
 import { clamp } from "../MyMath.js";
 import { Rect } from "../Rect.js";
+import { TheEmptyImage } from "../AssetDefination.js";
 
 console.log(`正在使用Pixi.js，Pixi版本: ${PIXI.VERSION}`);
 
@@ -22,12 +23,16 @@ export class PixiManager {
         });
     }
 
-    drawImage(transform: Transform, image: PixiImage, effects: IDrawEffects) {
-        if (image.loadState != AssetLoadState.Ready) { return; }
-
-        const pSprite = new PIXI.Sprite(image);
-
+    getSprite(transform: Transform, image: PixiImage, effects: IDrawEffects, target?: PIXI.Sprite) {
+        const pSprite = target ?? new PIXI.Sprite();
         pSprite.anchor.set(0.5);
+
+        if (image.loadState != AssetLoadState.Ready) {
+            return pSprite;
+        }
+
+        pSprite.texture = image.texture;
+
         [ pSprite.x, pSprite.y ] = transform.position;
         pSprite.scale.x = transform.sx * transform.s;
         pSprite.scale.y = transform.sy * transform.s;
@@ -55,21 +60,24 @@ export class PixiManager {
             pSprite.filters = filter;
         }
 
-        this.app.stage.addChild(pSprite);
+        return pSprite;
+
     }
 
-    drawRect(rect: Rect, width: number, color: number) {
-        const pRect = new PIXI.Graphics();
+    getRect(rect: Rect, width: number, color: number, target?: PIXI.Graphics) {
+        const pRect = target ?? new PIXI.Graphics();
+        pRect.clear();
         pRect.rect(rect.left, rect.bottom, rect.w, rect.h);
         pRect.stroke({ width: width, color: color });
-        this.app.stage.addChild(pRect);
+        return pRect;
     }
 
-    drawWay(points: {x: number, y: number}[], width: number, color: number) {
-        const pWay = new PIXI.Graphics();
+    getWay(points: {x: number, y: number}[], width: number, color: number, target?: PIXI.Graphics) {
+        const pWay = target ?? new PIXI.Graphics();
+        pWay.clear();
         pWay.poly(points, false);
         pWay.stroke({ width: width, color: color });
-        this.app.stage.addChild(pWay);
+        return pWay;
     }
 
     clear() {
